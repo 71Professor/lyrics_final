@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metal Lyrics Generator - KI-gestützte Metal-Texte aus Mythologie</title>
+    <meta name="description" content="Generiere authentische Metal-Lyrics basierend auf 12+ Mythologien weltweit. Perfekt für Thrash, Death, Black und Power Metal.">
+    
+    <!-- Google Fonts für Metal-Ästhetik -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-extended.css">
+</head>
+<body>
+    <!-- Hintergrund-Overlay für Textur -->
+    <div class="grain-overlay"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 class="logo">⚡ METAL LYRICS GENERATOR</h1>
+            <p class="tagline">KI-gestützte Lyrics aus den Tiefen der Mythologie</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Info-Box -->
+        <div class="info-box">
+            <p>🎸 Erstelle authentische Metal-Lyrics basierend auf 12+ Mythologien aus aller Welt. Perfekt für Songwriter, Bands oder Metal-Fans!</p>
+        </div>
+
+        <!-- Generator Form -->
+        <section class="generator-section">
+            <h2>🔥 Erstelle deine Lyrics</h2>
+            
+            <form id="lyric-form">
+                <!-- Mythologie Auswahl -->
+                <div class="form-group">
+                    <label for="mythology">
+                        <strong>Mythologie wählen:</strong>
+                        <span class="tooltip">ℹ️
+                            <span class="tooltip-text">Wähle die mythologische Basis für deine Lyrics</span>
+                        </span>
+                    </label>
+                    <select id="mythology" name="mythology" required>
+                        <option value="">-- Wähle eine Mythologie --</option>
+                        
+                        <optgroup label="🌍 Europäisch">
+                            <option value="norse">🪓 Nordisch (Odin, Thor, Ragnarök)</option>
+                            <option value="celtic">🍀 Keltisch (Druiden, Morrigan)</option>
+                            <option value="greek">🏛️ Griechisch (Zeus, Hades, Olymp)</option>
+                            <option value="slavic">❄️ Slawisch (Perun, Baba Yaga) [NEU]</option>
+                        </optgroup>
+                        
+                        <optgroup label="🌏 Asiatisch">
+                            <option value="japanese">⚔️ Japanisch (Samurai, Yokai) [NEU]</option>
+                            <option value="chinese">🐉 Chinesisch (Drachen, Dao) [NEU]</option>
+                            <option value="hindu">🕉️ Hinduistisch (Shiva, Kali) [NEU]</option>
+                        </optgroup>
+                        
+                        <optgroup label="🌎 Amerika & Afrika">
+                            <option value="aztec">🗿 Aztekisch (Quetzalcoatl) [NEU]</option>
+                            <option value="mayan">🌴 Maya (Kukulkan, Xibalba) [NEU]</option>
+                            <option value="african">🦁 Afrikanisch (Anansi, Orishas) [NEU]</option>
+                        </optgroup>
+                        
+                        <optgroup label="🏺 Antike Kulturen">
+                            <option value="egyptian">𓂀 Ägyptisch (Ra, Anubis)</option>
+                            <option value="mesopotamian">🏛️ Mesopotamisch (Gilgamesh) [NEU]</option>
+                        </optgroup>
+                        
+                        <optgroup label="🌑 Okkultes & Horror">
+                            <option value="occult">🕯️ Okkultes (Dämonen, Rituale)</option>
+                            <option value="lovecraft">🐙 Lovecraft (Cthulhu) [PREMIUM]</option>
+                            <option value="gothic">🦇 Gothic Horror (Vampire) [PREMIUM]</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <!-- Genre Auswahl -->
+                <div class="form-group">
+                    <label for="genre">
+                        <strong>Metal-Genre:</strong>
+                    </label>
+                    <select id="genre" name="genre" required>
+    <option value="">-- Wähle ein Genre --</option>
+    <option value="thrash">⚡ Thrash Metal (schnell, aggressiv)</option>
+    <option value="death">💀 Death Metal (brutal, technisch)</option>
+    <option value="black">🌑 Black Metal (atmosphärisch, düster)</option>
+    <option value="power">⚔️ Power Metal (episch, melodisch)</option>
+    <option value="doom">🕳️ Doom Metal (langsam, schwer)</option>
+    <option value="folk">🌲 Folk Metal (naturverbunden)</option>
+
+    <!-- NEU -->
+    <option value="heavy">⚙️ Heavy Metal (klassisch)</option>
+    <option value="metalcore">🔥 Metalcore (modern, Breakdowns)</option>
+    <option value="gothic">🕯️ Gothic Metal (düster, melancholisch)</option>
+</select>
+
+                </div>
+
+                <!-- Thema Input -->
+                <div class="form-group">
+                    <label for="theme">
+                        <strong>Thema/Konzept:</strong>
+                        <span class="tooltip">ℹ️
+                            <span class="tooltip-text">Z.B. "Krieg", "Rache", "Tod", "Ehre", "Weltuntergang"</span>
+                        </span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="theme" 
+                        name="theme" 
+                        placeholder="z.B. Krieg, Rache, Apokalypse..."
+                        required
+                        maxlength="50"
+                    >
+                </div>
+
+                <!-- Song-Struktur -->
+                <div class="form-group">
+                    <label for="structure">
+                        <strong>Song-Struktur:</strong>
+                        <span class="tooltip">ℹ️
+                            <span class="tooltip-text">Premium bietet komplexe Strukturen mit Intro, Bridge, Solo etc.</span>
+                        </span>
+                    </label>
+                    <select id="structure" name="structure">
+                        <optgroup label="Free Versionen">
+                            <option value="short">Kurz (Verse + Chorus)</option>
+                            <option value="medium" selected>Mittel (2 Verses + Chorus)</option>
+                        </optgroup>
+                        <optgroup label="Premium Versionen">
+                            <option value="long">Lang (3 Verses + Bridge + Chorus) [PREMIUM]</option>
+                            <option value="epic">Epic (Intro → Verses → Bridge → Solo → Outro) [PREMIUM]</option>
+                            <option value="progressive">Progressive (Multi-Part, komplex) [PREMIUM]</option>
+                            <option value="concept">Concept (Story-basiert, 3 Akte) [PREMIUM]</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <!-- Zusätzliche Optionen (Premium) -->
+                <div class="form-group premium-only" style="display: none;">
+                    <label for="intensity">
+                        <strong>🔥 Intensität:</strong>
+                    </label>
+                    <select id="intensity" name="intensity">
+                        <option value="moderate">Moderat</option>
+                        <option value="high" selected>Hoch</option>
+                        <option value="extreme">Extrem</option>
+                    </select>
+                </div>
+
+                <div class="form-group premium-only" style="display: none;">
+                    <label for="language-style">
+                        <strong>📝 Sprachstil:</strong>
+                    </label>
+                    <select id="language-style" name="language-style">
+                        <option value="modern">Modern</option>
+                        <option value="archaic" selected>Archaisch/Poetisch</option>
+                        <option value="brutal">Brutal/Direkt</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="generate-btn" id="generate-btn">
+                    <span class="btn-text">🔥 LYRICS GENERIEREN 🔥</span>
+                    <span class="btn-loader" style="display: none;">⚡ Generiere...</span>
+                </button>
+
+                <!-- Usage Counter -->
+                <div class="usage-info">
+                    <p>Heute generiert: <span id="usage-count">0</span> / 5 (Free)</p>
+                    <a href="#premium" class="premium-link">Upgrade für unbegrenzte Generierungen →</a>
+                </div>
+            </form>
+
+            <!-- ========== PREMIUM CODE EINGABE ========== -->
+            <div class="premium-section-inline">
+                <div id="premium-status"></div>
+                
+                <div class="premium-activation">
+                    <h3>🔓 Premium freischalten</h3>
+                    <p>Hast du einen Premium-Code? Gib ihn hier ein:</p>
+                    
+                    <div class="premium-input-group">
+                        <input 
+                            type="text" 
+                            id="premium-code-input" 
+                            placeholder="z.B. METAL2024-ABC123"
+                            maxlength="30"
+                        >
+                        <button type="button" id="activate-premium-btn" class="premium-activate-btn">
+                            🔓 Aktivieren
+                        </button>
+                    </div>
+                    
+                    <p class="small-text premium-hint">
+                        Noch kein Code? 
+                        <a href="#premium" class="premium-link">Jetzt Premium kaufen →</a>
+                    </p>
+                </div>
+            </div>
+            <!-- ========== ENDE PREMIUM CODE EINGABE ========== -->
+
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="results-section" style="display: none;">
+            <h2>🎤 Deine Metal Lyrics</h2>
+            
+            <div class="lyrics-container">
+                <div class="lyrics-header">
+                    <h3 id="lyrics-title">Titel wird generiert...</h3>
+                    <button class="copy-btn" id="copy-btn" title="In Zwischenablage kopieren">
+                        📋 Kopieren
+                    </button>
+                </div>
+                
+                <div class="lyrics-content" id="lyrics-content">
+                    <!-- Hier werden die Lyrics angezeigt -->
+                </div>
+
+                <div class="lyrics-footer">
+                    <p class="lyrics-info">
+                        <strong>Mythologie:</strong> <span id="result-mythology"></span> | 
+                        <strong>Genre:</strong> <span id="result-genre"></span> |
+                        <strong>Struktur:</strong> <span id="result-structure"></span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+    <button class="secondary-btn" id="regenerate-btn">🔄 Neu generieren</button>
+    <button class="secondary-btn" id="new-theme-btn">✨ Neues Thema</button>
+    <button class="secondary-btn" id="export-txt-btn">📄 Export als TXT</button>
+</div>
+
+        </section>
+
+        <!-- Example Section -->
+        <section class="examples-section">
+            <h2>💎 Beispiel-Lyrics</h2>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <h3>🪓 Nordisch × Thrash</h3>
+                    <p><em>"Blades of Valhalla"</em></p>
+                    <blockquote>
+                        Through storms of steel and thunder's rage<br>
+                        The Allfather calls from beyond the grave<br>
+                        Valkyries scream, their wings of fire<br>
+                        We march to die in Odin's pyre
+                    </blockquote>
+                </div>
+                <div class="example-card">
+                    <h3>⚔️ Japanisch × Death Metal</h3>
+                    <p><em>"Blades of the Ronin"</em> <span class="badge-new">NEU</span></p>
+                    <blockquote>
+                        Seven swords in crimson rain<br>
+                        Bushido carved in endless pain<br>
+                        Honor bound to death's embrace<br>
+                        Samurai fall without disgrace
+                    </blockquote>
+                </div>
+                <div class="example-card">
+                    <h3>🗿 Aztekisch × Power Metal</h3>
+                    <p><em>"Serpent God's Ascension"</em> <span class="badge-new">NEU</span></p>
+                    <blockquote>
+                        Feathered serpent takes the sky<br>
+                        Blood pyramids reaching high<br>
+                        Ancient priests chant the rite<br>
+                        Quetzalcoatl brings the light
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium Section -->
+        <section class="premium-section" id="premium">
+            <h2>⚡ Premium Features</h2>
+            <div class="premium-grid">
+                <div class="premium-card">
+                    <h3>🔓 Unbegrenzt</h3>
+                    <p>Keine Limits bei den Generierungen</p>
+                </div>
+                <div class="premium-card">
+                    <h3>🌍 12+ Mythologien</h3>
+                    <p>Alle Kulturen inkl. Lovecraft & Gothic Horror</p>
+                </div>
+                <div class="premium-card">
+                    <h3>🎭 Komplexe Strukturen</h3>
+                    <p>Epic, Progressive, Concept Songs</p>
+                </div>
+                <div class="premium-card">
+                    <h3>🎵 Genre-Mixing</h3>
+                    <p>Kombiniere Stile (z.B. Symphonic Death)</p>
+                </div>
+                <div class="premium-card">
+                    <h3>📄 Export</h3>
+                    <p>Download als TXT, PDF</p>
+                </div>
+                <div class="premium-card">
+                    <h3>🎨 Anpassungen</h3>
+                    <p>Intensität, Sprachstil, Länge kontrollieren</p>
+                </div>
+            </div>
+            <div class="premium-cta">
+                <h3>Nur 4,99€/Monat oder 49€/Jahr</h3>
+                <button class="premium-btn" onclick="alert('Zahlungssystem kommt bald! Trage dich in die Warteliste ein.')">
+                    🔥 PREMIUM FREISCHALTEN
+                </button>
+                <p class="small-text">Jederzeit kündbar • 14 Tage Geld-zurück-Garantie</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Metal Lyrics Generator | Powered by AI & Mythologie</p>
+            <p>
+                <a href="#datenschutz">Datenschutz</a> | 
+                <a href="#impressum">Impressum</a> | 
+                <a href="mailto:contact@metal-lyrics-ai.com">Kontakt</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

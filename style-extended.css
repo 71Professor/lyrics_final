@@ -1,0 +1,487 @@
+/* ============================================
+   METAL LYRICS GENERATOR V2 - STYLESHEET
+   Dark Theme mit Metal-Ästhetik
+   MIT ERWEITERTEN FEATURES
+   ============================================ */
+
+/* Original CSS importieren oder hier einfügen */
+@import url('style.css');
+
+/* ============================================
+   NEUE STYLES FÜR ERWEITERTE VERSION
+   ============================================ */
+
+/* Badge "NEU" für neue Mythologien */
+.badge-new {
+    display: inline-block;
+    background: linear-gradient(135deg, #c41e3a 0%, #ff6b6b 100%);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+    box-shadow: 0 2px 8px rgba(196, 30, 58, 0.4);
+    animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Premium-Only Elemente */
+.premium-only {
+    position: relative;
+}
+
+.premium-only::after {
+    content: "🔒 PREMIUM";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
+    color: var(--color-accent-bright);
+    font-weight: 700;
+    padding: 2px 6px;
+    background: rgba(196, 30, 58, 0.2);
+    border: 1px solid var(--color-accent);
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+/* Optgroups in Select */
+select optgroup {
+    font-weight: 700;
+    font-style: normal;
+    color: var(--color-accent-bright);
+    background: var(--color-bg-secondary);
+    padding: 8px 0;
+}
+
+select option {
+    padding: 8px 16px;
+    font-weight: 400;
+}
+
+select option:disabled {
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* Erweiterte Form-Gruppen */
+.form-group-inline {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group-inline .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Struktur-Info Tooltip */
+.structure-info {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-xs);
+    padding: var(--spacing-xs);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    border-left: 2px solid var(--color-accent);
+}
+
+.structure-info strong {
+    color: var(--color-text);
+}
+
+/* Premium Features Toggle */
+.premium-features-toggle {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md);
+    background: linear-gradient(135deg, rgba(196, 30, 58, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.premium-features-toggle h4 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-accent-bright);
+}
+
+.premium-features-toggle p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Mythology Grid (alternative Darstellung) */
+.mythology-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.mythology-card {
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.mythology-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(196, 30, 58, 0.3);
+}
+
+.mythology-card.selected {
+    border-color: var(--color-accent-bright);
+    background: rgba(196, 30, 58, 0.1);
+}
+
+.mythology-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mythology-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.mythology-card p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+/* Export Button (Premium) */
+#export-btn {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    border-color: #2ecc71;
+}
+
+#export-btn:hover {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+/* Lyrics Sections Highlighting */
+.lyrics-content {
+    line-height: 2;
+}
+
+.lyrics-content::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--color-accent) 50%, transparent 100%);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Structure Display in Results */
+#result-structure {
+    color: var(--color-accent-bright);
+    font-weight: 700;
+}
+
+/* Premium Active Indicator - Enhanced */
+.premium-active {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-md);
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    animation: premium-glow 3s infinite;
+}
+
+@keyframes premium-glow {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(46, 204, 113, 0.6);
+    }
+}
+
+/* Intensity & Language Style Indicators */
+.option-indicator {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(196, 30, 58, 0.2);
+    border: 1px solid var(--color-accent);
+    border-radius: 16px;
+    font-size: 0.8rem;
+    margin-left: 8px;
+    color: var(--color-accent-bright);
+}
+
+/* Advanced Structure Preview */
+.structure-preview {
+    margin-top: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    display: none;
+}
+
+.form-group:hover .structure-preview {
+    display: block;
+}
+
+.structure-preview ol {
+    margin: var(--spacing-xs) 0;
+    padding-left: var(--spacing-md);
+}
+
+.structure-preview li {
+    margin: 4px 0;
+    color: var(--color-text);
+}
+
+/* Statistics Display (für Premium) */
+.stats-container {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    display: none;
+}
+
+.stats-container.show {
+    display: block;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-sm);
+}
+
+.stat-item {
+    text-align: center;
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-accent-bright);
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .mythology-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .form-group-inline {
+        flex-direction: column;
+    }
+    
+    .premium-only::after {
+        position: static;
+        display: block;
+        margin-top: var(--spacing-xs);
+        transform: none;
+    }
+}
+
+/* Loading State Enhanced */
+.generating-animation {
+    display: none;
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.generating-animation.active {
+    display: block;
+}
+
+.generating-spinner {
+    font-size: 3rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.generating-text {
+    margin-top: var(--spacing-md);
+    font-size: 1.2rem;
+    color: var(--color-accent-bright);
+}
+
+.generating-subtext {
+    margin-top: var(--spacing-xs);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+/* Feature Comparison Table (für Landing Page) */
+.feature-comparison {
+    margin: var(--spacing-xl) 0;
+    overflow-x: auto;
+}
+
+.feature-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-bg-secondary);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.feature-table th,
+.feature-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.feature-table th {
+    background: var(--color-bg-card);
+    color: var(--color-accent-bright);
+    font-weight: 700;
+}
+
+.feature-table tr:last-child td {
+    border-bottom: none;
+}
+
+.feature-check {
+    color: #2ecc71;
+    font-size: 1.2rem;
+}
+
+.feature-cross {
+    color: var(--color-text-muted);
+    font-size: 1.2rem;
+}
+
+/* Testimonials Section (optional) */
+.testimonials-section {
+    margin: var(--spacing-xl) 0;
+    padding: var(--spacing-xl);
+    background: linear-gradient(135deg, var(--color-bg-secondary) 0%, #1a0a0f 100%);
+    border-radius: var(--border-radius);
+}
+
+.testimonial-card {
+    background: var(--color-bg-card);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--color-accent);
+    margin-bottom: var(--spacing-md);
+}
+
+.testimonial-text {
+    font-style: italic;
+    margin-bottom: var(--spacing-sm);
+}
+
+.testimonial-author {
+    color: var(--color-accent-bright);
+    font-weight: 700;
+}
+
+/* Mythology Icons Enhancement */
+select option::before {
+    content: attr(data-icon);
+    margin-right: 8px;
+}
+
+/* Premium Upgrade Prompt */
+.upgrade-prompt {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+    color: white;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 30px rgba(196, 30, 58, 0.5);
+    max-width: 300px;
+    z-index: 1000;
+    display: none;
+    animation: slideInUp 0.5s ease;
+}
+
+.upgrade-prompt.show {
+    display: block;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.upgrade-prompt h4 {
+    margin-bottom: var(--spacing-xs);
+    font-size: 1.1rem;
+}
+
+.upgrade-prompt p {
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.upgrade-prompt .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.upgrade-prompt .close-btn:hover {
+    opacity: 1;
+}
+
+/* ============================================
+   ENDE ERWEITERTE STYLES
+   ============================================ */

@@ -76,12 +76,13 @@ define('PREMIUM_CODES', [
 
 /**
  * Disposable Codes Settings
- * Einweg-Codes können nur einmal aktiviert werden
+ * 24-Stunden-Codes: Codes sind ab erster Aktivierung 24 Stunden gültig
  */
 define('ENABLE_DISPOSABLE_CODES', true);
 define('DISPOSABLE_CODES_FILE', __DIR__ . '/disposable_codes.json');
 define('DISPOSABLE_CODE_PACKAGE_PRICE', 5.00); // EUR
-define('DISPOSABLE_CODE_PACKAGE_SIZE', 10); // Anzahl Codes pro Paket
+define('DISPOSABLE_CODE_PACKAGE_SIZE', 1); // 1 Code pro Paket
+define('DISPOSABLE_CODE_DURATION_HOURS', 24); // Gültigkeitsdauer in Stunden
 
 // ========================================
 // LOGGING & DEBUGGING
@@ -274,39 +275,54 @@ function saveDisposableCodes($data) {
 }
 
 /**
- * Check if a disposable code is valid and unused
+ * Check if a disposable code is valid and not expired
  *
  * @param string $code The code to check
- * @return array ['valid' => bool, 'used' => bool, 'data' => array]
+ * @return array ['valid' => bool, 'activated' => bool, 'expired' => bool, 'data' => array, 'remaining_hours' => float]
  */
 function checkDisposableCode($code) {
     if (!ENABLE_DISPOSABLE_CODES) {
-        return ['valid' => false, 'used' => false, 'data' => null];
+        return ['valid' => false, 'activated' => false, 'expired' => false, 'data' => null, 'remaining_hours' => 0];
     }
 
     $data = loadDisposableCodes();
 
     if (!isset($data['codes'][$code])) {
-        return ['valid' => false, 'used' => false, 'data' => null];
+        return ['valid' => false, 'activated' => false, 'expired' => false, 'data' => null, 'remaining_hours' => 0];
     }
 
     $codeData = $data['codes'][$code];
-    $isUsed = isset($codeData['used']) && $codeData['used'] === true;
+    $isActivated = !empty($codeData['activated_at']);
+    $isExpired = false;
+    $remainingHours = 0;
+
+    if ($isActivated && !empty($codeData['expires_at'])) {
+        $expiresAt = strtotime($codeData['expires_at']);
+        $now = time();
+        $isExpired = ($now >= $expiresAt);
+
+        if (!$isExpired) {
+            $remainingSeconds = $expiresAt - $now;
+            $remainingHours = $remainingSeconds / 3600;
+        }
+    }
 
     return [
         'valid' => true,
-        'used' => $isUsed,
-        'data' => $codeData
+        'activated' => $isActivated,
+        'expired' => $isExpired,
+        'data' => $codeData,
+        'remaining_hours' => $remainingHours
     ];
 }
 
 /**
- * Mark a disposable code as used
+ * Activate a disposable code (sets activation time and expiration time)
  *
- * @param string $code The code to mark as used
+ * @param string $code The code to activate
  * @return bool Success status
  */
-function markDisposableCodeAsUsed($code) {
+function activateDisposableCode($code) {
     if (!ENABLE_DISPOSABLE_CODES) {
         return false;
     }
@@ -317,17 +333,20 @@ function markDisposableCodeAsUsed($code) {
         return false;
     }
 
-    // Mark code as used
-    $data['codes'][$code]['used'] = true;
-    $data['codes'][$code]['used_at'] = date('Y-m-d H:i:s');
-    $data['codes'][$code]['used_ip'] = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $now = date('Y-m-d H:i:s');
+    $expiresAt = date('Y-m-d H:i:s', strtotime('+' . DISPOSABLE_CODE_DURATION_HOURS . ' hours'));
+
+    // Activate code
+    $data['codes'][$code]['activated_at'] = $now;
+    $data['codes'][$code]['expires_at'] = $expiresAt;
+    $data['codes'][$code]['activation_ip'] = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 
     // Update metadata
-    if (!isset($data['metadata']['total_codes_used'])) {
-        $data['metadata']['total_codes_used'] = 0;
+    if (!isset($data['metadata']['total_codes_activated'])) {
+        $data['metadata']['total_codes_activated'] = 0;
     }
-    $data['metadata']['total_codes_used']++;
-    $data['metadata']['last_updated'] = date('Y-m-d H:i:s');
+    $data['metadata']['total_codes_activated']++;
+    $data['metadata']['last_updated'] = $now;
 
     return saveDisposableCodes($data);
 }

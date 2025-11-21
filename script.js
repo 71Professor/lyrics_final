@@ -39,14 +39,15 @@ async function loadPremiumStatus() {
         updatePremiumUI();
         return;
     }
-    
+
     try {
         const response = await fetch(CONFIG.API_BASE + 'check-premium.php');
         const data = await response.json();
-        
+
         isPremiumUser = data.isPremium;
+        window.premiumExpiresAt = data.expiresAt;
         updatePremiumUI();
-        
+
     } catch (error) {
         console.error('Error loading premium status:', error);
     }
@@ -85,6 +86,7 @@ async function activatePremiumCode() {
         
         if (data.success) {
             isPremiumUser = true;
+            window.premiumExpiresAt = data.expiresAt;
             premiumCodeInput.value = '';
             showPremiumMessage(data.message, 'success');
             updatePremiumUI();
@@ -104,11 +106,28 @@ async function activatePremiumCode() {
 // ===== UPDATE PREMIUM UI =====
 function updatePremiumUI() {
     if (isPremiumUser) {
-        premiumStatus.innerHTML = `
+        let statusHTML = `
             <div class="premium-active">
                 ✅ <strong>Premium Active</strong> - Unlimited Generations!
             </div>
         `;
+
+        // Show expiration info for time-based codes
+        if (window.premiumExpiresAt) {
+            const expiresAt = new Date(window.premiumExpiresAt);
+            const now = new Date();
+            const remainingHours = Math.max(0, (expiresAt - now) / (1000 * 60 * 60));
+
+            if (remainingHours > 0) {
+                statusHTML += `
+                    <div class="premium-info">
+                        ⏱️ Valid for ${remainingHours.toFixed(1)} more hours
+                    </div>
+                `;
+            }
+        }
+
+        premiumStatus.innerHTML = statusHTML;
         document.querySelector('.premium-activation').style.display = 'none';
         usageCount.parentElement.innerHTML = '<p><strong>Premium:</strong> ∞ Unlimited</p>';
     } else {

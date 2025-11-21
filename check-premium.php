@@ -25,10 +25,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $isPremium = isset($_SESSION['premium_active']) && $_SESSION['premium_active'] === true;
 
+    // Check if premium is still valid (for time-based codes)
+    if ($isPremium && isset($_SESSION['premium_code']) && isset($_SESSION['premium_type'])) {
+        if ($_SESSION['premium_type'] === 'disposable') {
+            $codeCheck = checkDisposableCode($_SESSION['premium_code']);
+
+            // If code is expired, deactivate premium
+            if ($codeCheck['valid'] && $codeCheck['activated'] && $codeCheck['expired']) {
+                unset($_SESSION['premium_active']);
+                unset($_SESSION['premium_code']);
+                unset($_SESSION['premium_activated_at']);
+                unset($_SESSION['premium_type']);
+                unset($_SESSION['premium_expires_at']);
+                $isPremium = false;
+            }
+        }
+    }
+
     echo json_encode([
         'isPremium' => $isPremium,
         'code' => $_SESSION['premium_code'] ?? null,
-        'activatedAt' => $_SESSION['premium_activated_at'] ?? null
+        'activatedAt' => $_SESSION['premium_activated_at'] ?? null,
+        'expiresAt' => $_SESSION['premium_expires_at'] ?? null,
+        'premiumType' => $_SESSION['premium_type'] ?? null
     ]);
     exit;
 }
@@ -57,34 +76,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($disposableCheck['valid']) {
                 // Code exists in disposable codes
-                if ($disposableCheck['used']) {
-                    // Code has already been used
-                    http_response_code(400);
-                    echo json_encode([
-                        'success' => false,
-                        'message' => '⚠️ This code has already been used and cannot be activated again.'
-                    ]);
-                    exit;
+
+                // Check if already activated and not expired - allow re-activation
+                if ($disposableCheck['activated']) {
+                    if ($disposableCheck['expired']) {
+                        // Code has expired
+                        http_response_code(400);
+                        echo json_encode([
+                            'success' => false,
+                            'message' => '⚠️ This code has expired. Premium codes are valid for 24 hours after first activation.'
+                        ]);
+                        exit;
+                    } else {
+                        // Code is still valid - allow login from different device
+                        $remainingHours = round($disposableCheck['remaining_hours'], 1);
+
+                        $_SESSION['premium_active'] = true;
+                        $_SESSION['premium_code'] = $code;
+                        $_SESSION['premium_activated_at'] = $disposableCheck['data']['activated_at'];
+                        $_SESSION['premium_expires_at'] = $disposableCheck['data']['expires_at'];
+                        $_SESSION['premium_type'] = 'disposable';
+
+                        echo json_encode([
+                            'success' => true,
+                            'message' => "✅ Premium activated! Code is valid for {$remainingHours} more hours.",
+                            'isPremium' => true,
+                            'codeType' => 'disposable',
+                            'expiresAt' => $disposableCheck['data']['expires_at'],
+                            'remainingHours' => $remainingHours
+                        ]);
+                        exit;
+                    }
                 }
 
-                // Code is valid and unused - activate it!
-                markDisposableCodeAsUsed($code);
+                // Code is valid and not activated yet - activate it!
+                activateDisposableCode($code);
+
+                $now = date('Y-m-d H:i:s');
+                $expiresAt = date('Y-m-d H:i:s', strtotime('+' . DISPOSABLE_CODE_DURATION_HOURS . ' hours'));
 
                 $_SESSION['premium_active'] = true;
                 $_SESSION['premium_code'] = $code;
-                $_SESSION['premium_activated_at'] = date('Y-m-d H:i:s');
+                $_SESSION['premium_activated_at'] = $now;
+                $_SESSION['premium_expires_at'] = $expiresAt;
                 $_SESSION['premium_type'] = 'disposable';
 
                 // Optional: Logging
                 if (ENABLE_LOGGING) {
-                    logMessage("Disposable premium code activated: $code", 'info');
+                    logMessage("Disposable premium code activated: $code (expires: $expiresAt)", 'info');
                 }
 
                 echo json_encode([
                     'success' => true,
-                    'message' => '✅ Premium successfully activated! This one-time code has been consumed.',
+                    'message' => '✅ Premium successfully activated! Valid for 24 hours.',
                     'isPremium' => true,
-                    'codeType' => 'disposable'
+                    'codeType' => 'disposable',
+                    'expiresAt' => $expiresAt,
+                    'remainingHours' => DISPOSABLE_CODE_DURATION_HOURS
                 ]);
                 exit;
             }

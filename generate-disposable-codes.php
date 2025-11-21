@@ -134,9 +134,9 @@ foreach ($newCodes as $code) {
         'batch_id' => $batchId,
         'package_name' => $packageName,
         'package_price' => DISPOSABLE_CODE_PACKAGE_PRICE,
-        'used' => false,
-        'used_at' => null,
-        'used_ip' => null
+        'activated_at' => null,
+        'expires_at' => null,
+        'activation_ip' => null
     ];
 }
 
@@ -148,8 +148,12 @@ if (!isset($data['metadata'])) {
 $data['metadata']['last_updated'] = $timestamp;
 $data['metadata']['total_codes_generated'] = ($data['metadata']['total_codes_generated'] ?? 0) + count($newCodes);
 
-if (!isset($data['metadata']['total_codes_used'])) {
-    $data['metadata']['total_codes_used'] = 0;
+if (!isset($data['metadata']['total_codes_activated'])) {
+    $data['metadata']['total_codes_activated'] = 0;
+}
+
+if (!isset($data['metadata']['total_codes_expired'])) {
+    $data['metadata']['total_codes_expired'] = 0;
 }
 
 // Save to file
@@ -177,11 +181,12 @@ echo "📦 PACKAGE INFORMATION:\n";
 echo "   Package: $packageName\n";
 echo "   Price: " . number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2) . " EUR\n";
 echo "   Codes: " . count($newCodes) . "\n";
+echo "   Duration: " . DISPOSABLE_CODE_DURATION_HOURS . " hours per code\n";
 echo "   Batch ID: $batchId\n";
 echo "\n";
 
 echo "🔑 GENERATED CODES:\n";
-echo "   (Each code can be used exactly once)\n";
+echo "   (Each code is valid for 24 hours after first activation)\n";
 echo "\n";
 
 foreach ($newCodes as $i => $code) {
@@ -193,15 +198,17 @@ echo "\n";
 echo "📊 STATISTICS:\n";
 echo "   Total codes in database: " . count($data['codes']) . "\n";
 echo "   Total codes generated: " . $data['metadata']['total_codes_generated'] . "\n";
-echo "   Total codes used: " . $data['metadata']['total_codes_used'] . "\n";
-echo "   Available codes: " . (count($data['codes']) - $data['metadata']['total_codes_used']) . "\n";
+echo "   Total codes activated: " . $data['metadata']['total_codes_activated'] . "\n";
+echo "   Total codes expired: " . $data['metadata']['total_codes_expired'] . "\n";
+echo "   Available codes: " . (count($data['codes']) - $data['metadata']['total_codes_activated']) . "\n";
 echo "\n";
 
 echo "💡 NEXT STEPS:\n";
 echo "   1. Save these codes securely\n";
 echo "   2. Distribute codes to customers after payment\n";
-echo "   3. Each code can only be activated once\n";
-echo "   4. Monitor usage with: php view-code-statistics.php\n";
+echo "   3. Each code is valid for 24 hours after first activation\n";
+echo "   4. Codes can be used on multiple devices during the 24-hour period\n";
+echo "   5. Monitor usage with: php view-code-statistics.php\n";
 echo "\n";
 
 echo "✨ Done!\n";

@@ -1,45 +1,45 @@
 <?php
 /**
  * METAL LYRICS GENERATOR - CONFIGURATION
- * 
- * ⚠️ WICHTIG: Diese Datei enthält deinen API-Key!
- * NIEMALS öffentlich teilen oder zu Git hochladen!
- * 
- * Füge diese Datei zur .gitignore hinzu:
+ *
+ * ⚠️ IMPORTANT: This file contains your API key!
+ * NEVER share publicly or upload to Git!
+ *
+ * Add this file to .gitignore:
  * echo "api/config.php" >> .gitignore
  */
 
 // ========================================
-// OPENAI API EINSTELLUNGEN
+// OPENAI API SETTINGS
 // ========================================
 
 /**
  * OpenAI API Key
- * 
- * Wo bekomme ich den Key?
- * 1. Gehe zu: https://platform.openai.com/api-keys
- * 2. Erstelle einen neuen API Key
- * 3. Kopiere den Key hierher (beginnt mit "sk-proj-...")
- * 
- * WICHTIG: Trage den Key NUR hier ein, NICHT in anderen Dateien!
+ *
+ * Where to get the key?
+ * 1. Go to: https://platform.openai.com/api-keys
+ * 2. Create a new API Key
+ * 3. Copy the key here (starts with "sk-proj-...")
+ *
+ * IMPORTANT: Only enter the key here, NOT in other files!
  */
-define('OPENAI_API_KEY', 'sk-proj-DEIN-API-KEY-HIER');
+define('OPENAI_API_KEY', 'sk-proj-YOUR-API-KEY-HERE');
 
 /**
- * OpenAI Model Auswahl
- * 
- * Verfügbare Models:
- * - 'gpt-4o'           → Empfohlen! Beste Balance (Qualität/Preis)
- * - 'gpt-4-turbo'      → Sehr gut, aber teurer
- * - 'gpt-3.5-turbo'    → Günstiger, aber schlechtere Qualität
- * 
- * Kosten pro 1000 Tokens (ca. 750 Wörter):
+ * OpenAI Model Selection
+ *
+ * Available Models:
+ * - 'gpt-4o'           → Recommended! Best balance (quality/price)
+ * - 'gpt-4-turbo'      → Very good, but more expensive
+ * - 'gpt-3.5-turbo'    → Cheaper, but lower quality
+ *
+ * Cost per 1000 Tokens (approx. 750 words):
  * - gpt-4o:        Input $2.50  | Output $10.00
  * - gpt-4-turbo:   Input $10.00 | Output $30.00
  * - gpt-3.5-turbo: Input $0.50  | Output $1.50
- * 
- * Durchschnittliche Lyrics = ~600 Tokens
- * → gpt-4o: ~$0.01 pro Generierung ✅
+ *
+ * Average lyrics = ~600 Tokens
+ * → gpt-4o: ~$0.01 per generation ✅
  */
 define('OPENAI_MODEL', 'gpt-4o');
 
@@ -48,30 +48,30 @@ define('OPENAI_MODEL', 'gpt-4o');
 // ========================================
 
 /**
- * Maximale kostenlose Generierungen pro Tag
- * (wird in script.js verwendet)
+ * Maximum free generations per day
+ * (used in script.js)
  */
 define('MAX_FREE_GENERATIONS', 5);
 
 /**
- * Rate Limiting aktivieren?
- * Verhindert zu viele API-Calls von einzelnen IPs
- * 
- * Benötigt: Session oder Datenbank für Tracking
+ * Enable rate limiting?
+ * Prevents too many API calls from individual IPs
+ *
+ * Requires: Session or database for tracking
  */
 define('ENABLE_RATE_LIMITING', false);
 
 /**
  * Premium Codes
- * User können diese Codes eingeben um Premium-Features freizuschalten
- * 
- * Format: 'CODE' => 'Beschreibung'
+ * Users can enter these codes to unlock Premium features
+ *
+ * Format: 'CODE' => 'Description'
  */
 define('PREMIUM_CODES', [
     'METAL2024-DEMO'  => 'Demo Premium Code',
     'METAL2024-VIP'   => 'VIP Access',
-    // Füge hier weitere Codes hinzu
-    // 'METAL2024-ABC123' => 'User: Max Mustermann',
+    // Add more codes here
+    // 'METAL2024-ABC123' => 'User: John Doe',
 ]);
 
 // ========================================
@@ -79,22 +79,22 @@ define('PREMIUM_CODES', [
 // ========================================
 
 /**
- * Logging aktivieren?
- * Speichert Generierungen in Logfile für Statistiken
- * 
+ * Enable logging?
+ * Saves generations in logfile for statistics
+ *
  * Logfile: api/logs/generation.log
- * 
- * WICHTIG: Erstelle den Ordner "logs" im api/ Verzeichnis!
- * Und setze Berechtigungen auf 755
+ *
+ * IMPORTANT: Create the "logs" folder in the api/ directory!
+ * And set permissions to 755
  */
 define('ENABLE_LOGGING', false);
 
 /**
- * Debug-Modus
- * Zeigt detaillierte Fehlermeldungen
- * 
- * ⚠️ Nur während Entwicklung aktivieren!
- * Auf Live-Server IMMER false!
+ * Debug mode
+ * Shows detailed error messages
+ *
+ * ⚠️ Only enable during development!
+ * ALWAYS false on live server!
  */
 define('DEBUG_MODE', false);
 
@@ -107,32 +107,32 @@ if (DEBUG_MODE) {
 }
 
 // ========================================
-// SICHERHEIT
+// SECURITY
 // ========================================
 
 /**
- * Erlaubte Domains für CORS
- * Liste von Domains, die auf die API zugreifen dürfen
- * 
- * Beispiele:
- * - 'https://deine-domain.de'
- * - 'https://www.deine-domain.de'
- * 
- * Leer lassen = alle Domains erlaubt (*)
+ * Allowed domains for CORS
+ * List of domains that are allowed to access the API
+ *
+ * Examples:
+ * - 'https://your-domain.com'
+ * - 'https://www.your-domain.com'
+ *
+ * Leave empty = all domains allowed (*)
  */
 define('ALLOWED_ORIGINS', [
-    // 'https://deine-domain.de',
-    // 'https://www.deine-domain.de',
+    // 'https://your-domain.com',
+    // 'https://www.your-domain.com',
 ]);
 
 /**
- * IP-Blacklist
- * IPs die blockiert werden sollen
- * 
- * Beispiel: ['192.168.1.100', '10.0.0.50']
+ * IP Blacklist
+ * IPs that should be blocked
+ *
+ * Example: ['192.168.1.100', '10.0.0.50']
  */
 define('IP_BLACKLIST', [
-    // Füge hier blockierte IPs hinzu
+    // Add blocked IPs here
 ]);
 
 // ========================================
@@ -140,12 +140,12 @@ define('IP_BLACKLIST', [
 // ========================================
 
 /**
- * System Prompt für ChatGPT
- * Definiert das Verhalten der AI
- * 
- * Kann angepasst werden für bessere Ergebnisse
+ * System Prompt for ChatGPT
+ * Defines the AI's behavior
+ *
+ * Can be customized for better results
  */
-define('SYSTEM_PROMPT', 
+define('SYSTEM_PROMPT',
     'You are an expert Metal lyricist specializing in mythological themes. ' .
     'Create authentic, powerful Metal lyrics that sound like they could be ' .
     'performed by real Metal bands. Use proper song structure with ' .
@@ -154,10 +154,10 @@ define('SYSTEM_PROMPT',
 );
 
 /**
- * Prompt-Templates für verschiedene Genres
- * Verbessert die Qualität für spezifische Genres
- * 
- * Wird in generate-lyrics.php NICHT verwendet (optional)
+ * Prompt templates for different genres
+ * Improves quality for specific genres
+ *
+ * NOT used in generate-lyrics.php (optional)
  */
 define('GENRE_PROMPTS', [
     'thrash' => 'Fast, aggressive, precise lyrics with powerful imagery',
@@ -169,24 +169,24 @@ define('GENRE_PROMPTS', [
 ]);
 
 // ========================================
-// VALIDIERUNG
+// VALIDATION
 // ========================================
 
 /**
- * Prüfe ob API Key gesetzt ist
+ * Check if API Key is set
  */
-if (OPENAI_API_KEY === 'sk-proj-DEIN-API-KEY-HIER' || empty(OPENAI_API_KEY)) {
+if (OPENAI_API_KEY === 'sk-proj-YOUR-API-KEY-HERE' || empty(OPENAI_API_KEY)) {
     if (DEBUG_MODE) {
-        die('❌ ERROR: Bitte trage deinen OpenAI API Key in config.php ein!');
+        die('❌ ERROR: Please enter your OpenAI API Key in config.php!');
     }
 }
 
 /**
- * Prüfe ob API Key das richtige Format hat
+ * Check if API Key has the correct format
  */
 if (!preg_match('/^sk-(proj-)?[a-zA-Z0-9]{20,}/', OPENAI_API_KEY)) {
     if (DEBUG_MODE) {
-        die('❌ ERROR: API Key hat ungültiges Format! Sollte mit "sk-proj-" beginnen.');
+        die('❌ ERROR: API Key has invalid format! Should start with "sk-proj-".');
     }
 }
 
@@ -195,10 +195,10 @@ if (!preg_match('/^sk-(proj-)?[a-zA-Z0-9]{20,}/', OPENAI_API_KEY)) {
 // ========================================
 
 /**
- * Prüfe ob ein Premium Code gültig ist
- * 
- * @param string $code Der eingegebene Code
- * @return bool True wenn gültig
+ * Check if a Premium code is valid
+ *
+ * @param string $code The entered code
+ * @return bool True if valid
  */
 function verifyPremiumCode($code) {
     $codes = PREMIUM_CODES;
@@ -206,9 +206,9 @@ function verifyPremiumCode($code) {
 }
 
 /**
- * Prüfe ob IP geblockt ist
- * 
- * @return bool True wenn geblockt
+ * Check if IP is blocked
+ *
+ * @return bool True if blocked
  */
 function isIPBlocked() {
     $clientIP = $_SERVER['REMOTE_ADDR'] ?? '';
@@ -217,22 +217,22 @@ function isIPBlocked() {
 }
 
 /**
- * Logging Funktion
- * 
- * @param string $message Die Log-Nachricht
- * @param string $type Der Log-Typ (info, error, warning)
+ * Logging function
+ *
+ * @param string $message The log message
+ * @param string $type The log type (info, error, warning)
  */
 function logMessage($message, $type = 'info') {
     if (!ENABLE_LOGGING) return;
-    
+
     $logDir = __DIR__ . '/logs';
     if (!is_dir($logDir)) {
         mkdir($logDir, 0755, true);
     }
-    
+
     $timestamp = date('Y-m-d H:i:s');
     $logEntry = "[$timestamp] [$type] $message\n";
-    
+
     error_log($logEntry, 3, $logDir . '/app.log');
 }
 
@@ -241,17 +241,17 @@ function logMessage($message, $type = 'info') {
 // ========================================
 
 /**
- * Configuration erfolgreich geladen!
- * 
- * Nächste Schritte:
- * 1. Trage deinen OpenAI API Key ein (siehe oben)
- * 2. Speichere diese Datei
- * 3. Lade sie auf deinen All-Inkl Webspace hoch
- * 4. Teste die API: https://deine-domain.de/api/generate-lyrics.php
- * 
+ * Configuration successfully loaded!
+ *
+ * Next steps:
+ * 1. Enter your OpenAI API Key (see above)
+ * 2. Save this file
+ * 3. Upload it to your web hosting
+ * 4. Test the API: https://your-domain.com/api/generate-lyrics.php
+ *
  * Support:
- * - README.md für Details
- * - QUICK-START.md für Anleitung
+ * - README.md for details
+ * - QUICK-START.md for instructions
  * - Email: contact@metal-lyrics-ai.com
  */
 ?>

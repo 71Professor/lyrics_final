@@ -33,26 +33,26 @@ $isPremium = isset($_SESSION['premium_active']) && $_SESSION['premium_active'] =
 
 if (!$isPremium) {
     $today = date('Y-m-d');
-    
+
     if (!isset($_SESSION['usage_data'])) {
         $_SESSION['usage_data'] = [
             'date' => $today,
             'count' => 0
         ];
     }
-    
+
     if ($_SESSION['usage_data']['date'] !== $today) {
         $_SESSION['usage_data'] = [
             'date' => $today,
             'count' => 0
         ];
     }
-    
+
     if ($_SESSION['usage_data']['count'] >= MAX_FREE_GENERATIONS) {
         http_response_code(429);
         echo json_encode([
             'error' => 'Rate Limit Exceeded',
-            'message' => 'Du hast dein Tageslimit von ' . MAX_FREE_GENERATIONS . ' Generierungen erreicht. Upgrade auf Premium für unbegrenzte Nutzung!',
+            'message' => 'You have reached your daily limit of ' . MAX_FREE_GENERATIONS . ' generations. Upgrade to Premium for unlimited usage!',
             'limit' => MAX_FREE_GENERATIONS,
             'remaining' => 0
         ]);
@@ -60,7 +60,7 @@ if (!$isPremium) {
     }
 }
 
-// ===== REQUEST VALIDIERUNG =====
+// ===== REQUEST VALIDATION =====
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($input['prompt']) || empty($input['prompt'])) {

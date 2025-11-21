@@ -48,27 +48,27 @@ async function loadPremiumStatus() {
         updatePremiumUI();
         
     } catch (error) {
-        console.error('Fehler beim Laden des Premium-Status:', error);
+        console.error('Error loading premium status:', error);
     }
 }
 
-// ===== PREMIUM CODE AKTIVIEREN =====
+// ===== ACTIVATE PREMIUM CODE =====
 async function activatePremiumCode() {
     const code = premiumCodeInput.value.trim();
-    
+
     if (!code) {
-        showPremiumMessage('Bitte gib einen Code ein', 'error');
+        showPremiumMessage('Please enter a code', 'error');
         return;
     }
-    
+
     if (CONFIG.DEMO_MODE) {
-        showPremiumMessage('Demo-Modus: Bitte aktiviere die API (DEMO_MODE: false)', 'error');
+        showPremiumMessage('Demo mode: Please activate the API (DEMO_MODE: false)', 'error');
         return;
     }
-    
+
     try {
         activatePremiumBtn.disabled = true;
-        activatePremiumBtn.textContent = '⏳ Prüfe...';
+        activatePremiumBtn.textContent = '⏳ Checking...';
         
         const response = await fetch(CONFIG.API_BASE + 'check-premium.php', {
             method: 'POST',
@@ -93,24 +93,24 @@ async function activatePremiumCode() {
         }
         
     } catch (error) {
-        console.error('Fehler beim Aktivieren:', error);
-        showPremiumMessage('Verbindungsfehler. Bitte versuche es erneut.', 'error');
+        console.error('Error activating:', error);
+        showPremiumMessage('Connection error. Please try again.', 'error');
     } finally {
         activatePremiumBtn.disabled = false;
-        activatePremiumBtn.textContent = '🔓 Aktivieren';
+        activatePremiumBtn.textContent = '🔓 Activate';
     }
 }
 
-// ===== PREMIUM UI AKTUALISIEREN =====
+// ===== UPDATE PREMIUM UI =====
 function updatePremiumUI() {
     if (isPremiumUser) {
         premiumStatus.innerHTML = `
             <div class="premium-active">
-                ✅ <strong>Premium Aktiv</strong> - Unbegrenzte Generierungen!
+                ✅ <strong>Premium Active</strong> - Unlimited Generations!
             </div>
         `;
         document.querySelector('.premium-activation').style.display = 'none';
-        usageCount.parentElement.innerHTML = '<p><strong>Premium:</strong> ∞ Unbegrenzt</p>';
+        usageCount.parentElement.innerHTML = '<p><strong>Premium:</strong> ∞ Unlimited</p>';
     } else {
         premiumStatus.innerHTML = '';
         document.querySelector('.premium-activation').style.display = 'block';
@@ -118,31 +118,31 @@ function updatePremiumUI() {
     }
 }
 
-// ===== PREMIUM MESSAGE ANZEIGEN =====
+// ===== SHOW PREMIUM MESSAGE =====
 function showPremiumMessage(message, type) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `premium-message premium-message-${type}`;
     messageDiv.textContent = message;
-    
+
     premiumStatus.appendChild(messageDiv);
-    
+
     setTimeout(() => {
         messageDiv.remove();
     }, 5000);
 }
 
-// ===== USAGE TRACKING (nur für Free User) =====
+// ===== USAGE TRACKING (only for Free Users) =====
 function updateUsageDisplay() {
     if (isPremiumUser) {
         usageCount.textContent = '∞';
         return;
     }
-    
+
     usageCount.textContent = Math.max(0, 5 - remainingGenerations);
-    
+
     if (remainingGenerations <= 0) {
         generateBtn.disabled = true;
-        generateBtn.innerHTML = '⚠️ Tageslimit erreicht - Upgrade auf Premium';
+        generateBtn.innerHTML = '⚠️ Daily limit reached - Upgrade to Premium';
     }
 }
 
@@ -400,40 +400,40 @@ IMPORTANT: The same theme "${theme}" should feel COMPLETELY DIFFERENT in ${genre
 Write the song now:`;
 }
 
-// ===== HAUPTFUNKTION: LYRICS GENERIEREN =====
+// ===== MAIN FUNCTION: GENERATE LYRICS =====
 async function generateLyrics(mythology, genre, theme, structure) {
     if (CONFIG.DEMO_MODE) {
         return generateDemoLyrics(mythology, genre, theme);
     }
-    
+
     const mythData = MYTHOLOGY_DATA[mythology];
     const genreData = GENRE_DATA[genre];
-    
+
     const prompt = createPrompt(mythology, genre, theme, structure, mythData, genreData);
-    
+
     const response = await fetch(CONFIG.API_BASE + 'generate-lyrics.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, mythology, genre, theme })
     });
-    
+
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        
+
         if (response.status === 429) {
             throw new Error('LIMIT_REACHED');
         }
-        
-        throw new Error(errorData.message || 'API-Fehler');
+
+        throw new Error(errorData.message || 'API Error');
     }
     
     const data = await response.json();
-    
-    // Update remaining von Backend
+
+    // Update remaining from backend
     if (data.metadata && data.metadata.remaining_free !== undefined) {
         remainingGenerations = data.metadata.remaining_free;
     }
-    
+
     return {
         title: data.title || 'Untitled',
         content: data.lyrics
@@ -443,40 +443,40 @@ async function generateLyrics(mythology, genre, theme, structure) {
 // ===== FORM SUBMIT =====
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const mythology = document.getElementById('mythology').value;
     const genre = document.getElementById('genre').value;
     const theme = document.getElementById('theme').value;
     const structure = document.getElementById('structure').value;
-    
+
     if (!mythology || !genre || !theme) {
-        alert('Bitte fülle alle Felder aus!');
+        alert('Please fill in all fields!');
         return;
     }
-    
+
     setLoadingState(true);
-    
+
     try {
         const lyrics = await generateLyrics(mythology, genre, theme, structure);
         displayLyrics(lyrics, mythology, genre);
         updateUsageDisplay();
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        
+
     } catch (error) {
-        console.error('Fehler:', error);
-        
+        console.error('Error:', error);
+
         if (error.message === 'LIMIT_REACHED') {
-            alert('Du hast dein Tageslimit erreicht! 🔒\n\nUpgrade auf Premium für unbegrenzte Generierungen.\n\nGib einen Premium-Code ein oder kontaktiere uns für einen Code.');
+            alert('You have reached your daily limit! 🔒\n\nUpgrade to Premium for unlimited generations.\n\nEnter a Premium code or contact us for a code.');
             document.getElementById('premium-code-input').focus();
         } else {
-            alert('Fehler: ' + error.message);
+            alert('Error: ' + error.message);
         }
     } finally {
         setLoadingState(false);
     }
 });
 
-// ===== HILFSFUNKTIONEN =====
+// ===== HELPER FUNCTIONS =====
 function displayLyrics(lyrics, mythology, genre) {
     lyricsTitle.textContent = lyrics.title;
     lyricsContent.textContent = lyrics.content;
@@ -496,7 +496,7 @@ copyBtn.addEventListener('click', () => {
     const text = `${lyricsTitle.textContent}\n\n${lyricsContent.textContent}`;
     navigator.clipboard.writeText(text).then(() => {
         const original = copyBtn.textContent;
-        copyBtn.textContent = '✅ Kopiert!';
+        copyBtn.textContent = '✅ Copied!';
         copyBtn.style.backgroundColor = '#2ecc71';
         setTimeout(() => {
             copyBtn.textContent = original;

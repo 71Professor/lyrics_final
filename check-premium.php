@@ -1,7 +1,7 @@
 <?php
 /**
  * PREMIUM CODE VALIDATION
- * Validiert Premium-Codes und verwaltet Premium-Status
+ * Validates Premium codes and manages Premium status
  */
 
 require_once 'config.php';
@@ -21,10 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// GET: Premium-Status abfragen
+// GET: Query Premium status
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $isPremium = isset($_SESSION['premium_active']) && $_SESSION['premium_active'] === true;
-    
+
     echo json_encode([
         'isPremium' => $isPremium,
         'code' => $_SESSION['premium_code'] ?? null,
@@ -33,78 +33,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// POST: Premium-Code validieren
+// POST: Validate Premium code
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
     $action = $input['action'] ?? '';
-    
-    // CODE AKTIVIEREN
+
+    // ACTIVATE CODE
     if ($action === 'activate') {
         $code = trim($input['code'] ?? '');
-        
+
         if (empty($code)) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Bitte gib einen Code ein'
+                'message' => 'Please enter a code'
             ]);
             exit;
         }
-        
-        // Prüfe ob Code gültig ist
+
+        // Check if code is valid
         $premiumCodes = PREMIUM_CODES;
-        
+
         if (isset($premiumCodes[$code])) {
-            // Code ist gültig!
+            // Code is valid!
             $_SESSION['premium_active'] = true;
             $_SESSION['premium_code'] = $code;
             $_SESSION['premium_activated_at'] = date('Y-m-d H:i:s');
-            
+
             // Optional: Logging
             if (ENABLE_LOGGING) {
-                logMessage("Premium aktiviert: $code", 'info');
+                logMessage("Premium activated: $code", 'info');
             }
-            
+
             echo json_encode([
                 'success' => true,
-                'message' => 'Premium erfolgreich aktiviert! 🎉',
+                'message' => 'Premium successfully activated! 🎉',
                 'isPremium' => true
             ]);
             exit;
         } else {
-            // Code ungültig
+            // Code invalid
             echo json_encode([
                 'success' => false,
-                'message' => 'Ungültiger Code. Bitte überprüfe deine Eingabe.'
+                'message' => 'Invalid code. Please check your entry.'
             ]);
             exit;
         }
     }
-    
-    // CODE DEAKTIVIEREN
+
+    // DEACTIVATE CODE
     if ($action === 'deactivate') {
         unset($_SESSION['premium_active']);
         unset($_SESSION['premium_code']);
         unset($_SESSION['premium_activated_at']);
-        
+
         echo json_encode([
             'success' => true,
-            'message' => 'Premium deaktiviert',
+            'message' => 'Premium deactivated',
             'isPremium' => false
         ]);
         exit;
     }
-    
-    // Unbekannte Action
+
+    // Unknown action
     http_response_code(400);
     echo json_encode([
         'success' => false,
-        'message' => 'Unbekannte Aktion'
+        'message' => 'Unknown action'
     ]);
     exit;
 }
 
-// Andere Methods nicht erlaubt
+// Other methods not allowed
 http_response_code(405);
 echo json_encode([
     'success' => false,

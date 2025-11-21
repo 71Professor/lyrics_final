@@ -1,14 +1,15 @@
-# Einweg-Premium-Codes System
+# 24-Stunden-Premium-Codes System
 
 ## Übersicht
 
-Das Einweg-Code-System ermöglicht es, Premium-Zugang über eindeutige Codes zu verkaufen, die nur **einmal aktiviert** werden können. Jeder Code wird nach der ersten Nutzung als "verbraucht" markiert und kann nicht erneut verwendet werden.
+Das 24-Stunden-Code-System ermöglicht es, Premium-Zugang über zeitbasierte Codes zu verkaufen. Jeder Code ist **ab erster Aktivierung 24 Stunden lang gültig** und kann in diesem Zeitraum auf beliebig vielen Geräten und von beliebigen IPs verwendet werden. Nach Ablauf der 24 Stunden verfällt der Code automatisch.
 
 ## 📦 Paket-Information
 
 - **Preis:** 5,00 EUR
-- **Anzahl Codes:** 10 Codes pro Paket
-- **Typ:** Einweg-Codes (einmalige Nutzung)
+- **Anzahl Codes:** 1 Code pro Paket
+- **Gültigkeitsdauer:** 24 Stunden ab erster Aktivierung
+- **Typ:** Zeitbasierte Codes (wiederverwendbar während Gültigkeitsdauer)
 - **Format:** `METAL-XXXXXXXXXXXX`
 
 ## 🚀 Installation
@@ -25,10 +26,10 @@ Das System ist bereits konfiguriert und einsatzbereit. Die folgenden Dateien wur
 
 ### 1. Codes Generieren
 
-Generiere ein Paket mit 10 Codes:
+Generiere einen einzelnen Code:
 
 ```bash
-php generate-disposable-codes.php 10 "Paket #1"
+php generate-disposable-codes.php 1 "Paket #1"
 ```
 
 Generiere 5 Codes für Tests:
@@ -37,7 +38,7 @@ Generiere 5 Codes für Tests:
 php generate-disposable-codes.php 5 "Test-Batch"
 ```
 
-Ohne Parameter werden standardmäßig 10 Codes generiert:
+Ohne Parameter wird standardmäßig 1 Code generiert:
 
 ```bash
 php generate-disposable-codes.php
@@ -53,12 +54,12 @@ php generate-disposable-codes.php
 📦 PACKAGE INFORMATION:
    Package: Paket #1
    Price: 5.00 EUR
-   Codes: 10
+   Codes: 1
+   Duration: 24 hours per code
 
 🔑 GENERATED CODES:
+   (Each code is valid for 24 hours after first activation)
     1. METAL-XYZ9ABC3DEF7
-    2. METAL-GHJ8KLM2NQR6
-    ...
 ```
 
 ### 2. Codes Verteilen
@@ -68,12 +69,13 @@ Die generierten Codes können auf verschiedene Weisen an Kunden verteilt werden:
 #### Option A: Manuelle Verteilung
 1. Codes generieren
 2. Codes per E-Mail an Kunden senden nach Zahlungseingang
-3. Code wird beim ersten Einlösen verbraucht
+3. Code wird beim ersten Einlösen aktiviert und ist 24 Stunden gültig
 
 #### Option B: Automatisierte Verteilung (PayPal/Gumroad)
 1. Codes im Voraus generieren
 2. Integration mit Payment-Provider einrichten
 3. Codes automatisch nach Zahlung versenden
+4. Kunde kann Code sofort aktivieren und 24 Stunden lang nutzen
 
 ### 3. Code-Statistiken Anzeigen
 
@@ -95,10 +97,16 @@ Nur unbenutzte Codes anzeigen:
 php view-code-statistics.php --detailed --unused
 ```
 
-Nur benutzte Codes anzeigen:
+Nur aktive (noch nicht abgelaufene) Codes anzeigen:
 
 ```bash
-php view-code-statistics.php --detailed --used
+php view-code-statistics.php --detailed --active
+```
+
+Nur abgelaufene Codes anzeigen:
+
+```bash
+php view-code-statistics.php --detailed --expired
 ```
 
 **Ausgabe:**
@@ -111,11 +119,13 @@ php view-code-statistics.php --detailed --used
 📊 OVERALL STATISTICS:
    ═══════════════════════════════════════
    Total Codes:        10
-   Used Codes:         3 (30.0%)
+   Activated Codes:    3 (30.0%)
    Unused Codes:       7
+   Active Codes:       2 (not expired)
+   Expired Codes:      1
    Package Price:      5.00 EUR
-   Codes per Package:  10
-   Estimated Revenue:  1.50 EUR
+   Code Duration:      24 hours
+   Total Revenue:      15.00 EUR
 ```
 
 ## 🔐 Sicherheit
@@ -127,8 +137,10 @@ php view-code-statistics.php --detailed --used
 - **Beispiel:** `METAL-ABC9XYZ3PQR7`
 
 ### Schutz vor Missbrauch
-- ✅ Jeder Code kann nur **einmal** aktiviert werden
-- ✅ Verwendete Codes werden mit Zeitstempel und IP gespeichert
+- ✅ Jeder Code ist **24 Stunden ab Aktivierung** gültig
+- ✅ Codes können während der Gültigkeitsdauer auf mehreren Geräten verwendet werden
+- ✅ Nach Ablauf der 24 Stunden wird der Code automatisch ungültig
+- ✅ Aktivierungszeitpunkt und IP werden mit Zeitstempel gespeichert
 - ✅ Codes werden in JSON-Datei persistent gespeichert
 - ✅ Serverseite Validierung (kein Client-Zugriff auf Code-Liste)
 
@@ -143,15 +155,16 @@ Die Code-Daten werden in `disposable_codes.json` gespeichert:
             "batch_id": "20251121-143000",
             "package_name": "Paket #1",
             "package_price": 5.00,
-            "used": true,
-            "used_at": "2025-11-21 15:45:30",
-            "used_ip": "192.168.1.100"
+            "activated_at": "2025-11-21 15:45:30",
+            "expires_at": "2025-11-22 15:45:30",
+            "activation_ip": "192.168.1.100"
         }
     },
     "metadata": {
         "last_updated": "2025-11-21 15:45:30",
         "total_codes_generated": 10,
-        "total_codes_used": 3
+        "total_codes_activated": 3,
+        "total_codes_expired": 1
     }
 }
 ```
@@ -160,14 +173,14 @@ Die Code-Daten werden in `disposable_codes.json` gespeichert:
 
 ### Für Admins:
 
-1. **Code-Paket generieren:**
+1. **Code generieren:**
    ```bash
-   php generate-disposable-codes.php 10 "Paket #1"
+   php generate-disposable-codes.php 1 "Paket #1"
    ```
 
-2. **Codes notieren** und sicher speichern
+2. **Code notieren** und sicher speichern
 
-3. **Codes verkaufen** (5 EUR für 10 Codes)
+3. **Code verkaufen** (5 EUR für 24-Stunden-Zugang)
 
 4. **Nach Zahlungseingang:** Code per E-Mail an Kunden senden
 
@@ -178,7 +191,7 @@ Die Code-Daten werden in `disposable_codes.json` gespeichert:
 
 ### Für Kunden:
 
-1. **Paket kaufen** (10 Codes für 5 EUR)
+1. **Code kaufen** (5 EUR für 24 Stunden Premium-Zugang)
 
 2. **Code erhalten** per E-Mail
 
@@ -186,13 +199,18 @@ Die Code-Daten werden in `disposable_codes.json` gespeichert:
    - Premium-Bereich öffnen
    - Code eingeben (z.B. `METAL-ABC9XYZ3PQR7`)
    - "Activate Premium" klicken
+   - Code ist ab jetzt 24 Stunden gültig
 
 4. **Premium-Zugang nutzen**:
    - Alle Mythologien verfügbar
    - Unbegrenzte Generierungen
    - Erweiterte Strukturen (Long, Epic, Progressive, Concept)
+   - Auf allen Geräten nutzbar mit demselben Code
 
-5. **Code kann nicht erneut verwendet werden** - Session bleibt aktiv bis Browser geschlossen wird
+5. **Code bleibt 24 Stunden gültig**:
+   - Kann auf mehreren Geräten gleichzeitig verwendet werden
+   - Läuft nach 24 Stunden automatisch ab
+   - Verbleibende Zeit wird angezeigt
 
 ## ⚙️ Konfiguration
 
@@ -209,7 +227,10 @@ define('DISPOSABLE_CODES_FILE', __DIR__ . '/disposable_codes.json');
 define('DISPOSABLE_CODE_PACKAGE_PRICE', 5.00);
 
 // Anzahl Codes pro Paket
-define('DISPOSABLE_CODE_PACKAGE_SIZE', 10);
+define('DISPOSABLE_CODE_PACKAGE_SIZE', 1);
+
+// Gültigkeitsdauer in Stunden
+define('DISPOSABLE_CODE_DURATION_HOURS', 24);
 ```
 
 ### Einweg-Codes Deaktivieren
@@ -230,9 +251,11 @@ Die Validierung erfolgt in folgender Reihenfolge:
 
 1. **Disposable Code prüfen** (wenn aktiviert)
    - Code in JSON-Datenbank suchen
-   - Prüfen ob bereits verwendet
-   - Falls verwendet: Fehler zurückgeben
-   - Falls unbenutzt: Code als verwendet markieren
+   - Prüfen ob bereits aktiviert
+   - Falls aktiviert: Prüfen ob noch gültig (< 24h)
+     - Falls abgelaufen: Fehler zurückgeben
+     - Falls noch gültig: Premium aktivieren
+   - Falls nicht aktiviert: Code aktivieren und Ablaufzeit setzen
 
 2. **Reguläre Premium Codes prüfen** (Fallback)
    - Code in `PREMIUM_CODES` Array suchen
@@ -257,26 +280,29 @@ chmod +x view-code-statistics.php
 
 ### Beispiel-Rechnung:
 
-- **Paketgröße:** 10 Codes
-- **Paketpreis:** 5,00 EUR
-- **Preis pro Code:** 0,50 EUR
+- **Preis pro Code:** 5,00 EUR
+- **Gültigkeitsdauer:** 24 Stunden
+- **Preis pro Stunde:** ~0,21 EUR
 
 **Verkaufsszenarien:**
 
-| Verkaufte Pakete | Einnahmen | Codes generiert | Codes verwendet |
-|------------------|-----------|-----------------|-----------------|
-| 10               | 50 EUR    | 100             | ~70-80          |
-| 50               | 250 EUR   | 500             | ~350-400        |
-| 100              | 500 EUR   | 1000            | ~700-800        |
+| Verkaufte Codes | Einnahmen | Aktive Nutzer (gleichzeitig) |
+|-----------------|-----------|------------------------------|
+| 10              | 50 EUR    | 3-5                          |
+| 50              | 250 EUR   | 15-20                        |
+| 100             | 500 EUR   | 30-40                        |
 
 ### Alternative Preismodelle:
 
-**Single Codes:**
-- 1 Code für 1,00 EUR (höherer Einzelpreis)
+**Verschiedene Laufzeiten:**
+- 12 Stunden für 3,00 EUR
+- 24 Stunden für 5,00 EUR (Standard)
+- 48 Stunden für 8,00 EUR
+- 7 Tage für 15,00 EUR
 
-**Bulk Pakete:**
-- 50 Codes für 20,00 EUR (0,40 EUR/Code)
-- 100 Codes für 35,00 EUR (0,35 EUR/Code)
+**Rabatt-Aktionen:**
+- Wochenende-Special: 24h für 3,00 EUR
+- Black Friday: 48h für 5,00 EUR
 
 ## 🆘 Fehlerbehebung
 
@@ -288,11 +314,11 @@ chmod 644 disposable_codes.json
 chown www-data:www-data disposable_codes.json
 ```
 
-### Problem: "Code has already been used"
+### Problem: "Code has expired"
 
-**Ursache:** Code wurde bereits eingelöst
+**Ursache:** Die 24-Stunden-Frist ist abgelaufen
 
-**Lösung:** Kunden einen neuen Code aus einem unbenutzten Paket geben
+**Lösung:** Kunden muss einen neuen Code kaufen
 
 ### Problem: "Invalid code"
 
@@ -330,21 +356,35 @@ ls -la disposable_codes.json
 }
 ```
 
-**Response (Erfolg):**
+**Response (Erfolg - Erstaktivierung):**
 ```json
 {
     "success": true,
-    "message": "✅ Premium successfully activated! This one-time code has been consumed.",
+    "message": "✅ Premium successfully activated! Valid for 24 hours.",
     "isPremium": true,
-    "codeType": "disposable"
+    "codeType": "disposable",
+    "expiresAt": "2025-11-22 15:45:30",
+    "remainingHours": 24
 }
 ```
 
-**Response (Code bereits verwendet):**
+**Response (Erfolg - Bereits aktiviert, noch gültig):**
+```json
+{
+    "success": true,
+    "message": "✅ Premium activated! Code is valid for 12.5 more hours.",
+    "isPremium": true,
+    "codeType": "disposable",
+    "expiresAt": "2025-11-22 15:45:30",
+    "remainingHours": 12.5
+}
+```
+
+**Response (Code abgelaufen):**
 ```json
 {
     "success": false,
-    "message": "⚠️ This code has already been used and cannot be activated again."
+    "message": "⚠️ This code has expired. Premium codes are valid for 24 hours after first activation."
 }
 ```
 

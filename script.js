@@ -146,6 +146,18 @@ function updateUsageDisplay() {
     }
 }
 
+// ===== PREMIUM MYTHOLOGY LIST =====
+// All non-European mythologies require premium access
+const PREMIUM_MYTHOLOGIES = [
+    'japanese', 'chinese', 'hindu',           // Asian
+    'aztec', 'mayan', 'african',              // Americas & Africa
+    'egyptian', 'mesopotamian',                // Ancient Cultures
+    'occult', 'lovecraft', 'gothic'           // Occult & Horror
+];
+
+// ===== PREMIUM STRUCTURE LIST =====
+const PREMIUM_STRUCTURES = ['long', 'epic', 'progressive', 'concept'];
+
 // ===== MYTHOLOGY DATA (erweitert) =====
 const MYTHOLOGY_DATA = {
     norse: {
@@ -451,6 +463,20 @@ form.addEventListener('submit', async (e) => {
 
     if (!mythology || !genre || !theme) {
         alert('Please fill in all fields!');
+        return;
+    }
+
+    // Check if mythology requires premium access
+    if (PREMIUM_MYTHOLOGIES.includes(mythology) && !isPremiumUser) {
+        alert('🔒 Premium Required!\n\nThis mythology is only available for Premium users.\n\nEuropean mythologies (Norse, Celtic, Greek, Slavic) are free for everyone!\n\nEnter a Premium code below or contact us to get access to all mythologies.');
+        document.getElementById('premium-code-input').focus();
+        return;
+    }
+
+    // Check if structure requires premium access
+    if (PREMIUM_STRUCTURES.includes(structure) && !isPremiumUser) {
+        alert('🔒 Premium Required!\n\nThis song structure is only available for Premium users.\n\nFree structures: Short, Medium\nPremium structures: Long, Epic, Progressive, Concept\n\nEnter a Premium code below or contact us to upgrade!');
+        document.getElementById('premium-code-input').focus();
         return;
     }
 

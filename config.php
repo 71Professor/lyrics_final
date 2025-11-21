@@ -74,6 +74,15 @@ define('PREMIUM_CODES', [
     // 'METAL2024-ABC123' => 'User: John Doe',
 ]);
 
+/**
+ * Disposable Codes Settings
+ * Einweg-Codes können nur einmal aktiviert werden
+ */
+define('ENABLE_DISPOSABLE_CODES', true);
+define('DISPOSABLE_CODES_FILE', __DIR__ . '/disposable_codes.json');
+define('DISPOSABLE_CODE_PACKAGE_PRICE', 5.00); // EUR
+define('DISPOSABLE_CODE_PACKAGE_SIZE', 10); // Anzahl Codes pro Paket
+
 // ========================================
 // LOGGING & DEBUGGING
 // ========================================
@@ -234,6 +243,93 @@ function logMessage($message, $type = 'info') {
     $logEntry = "[$timestamp] [$type] $message\n";
 
     error_log($logEntry, 3, $logDir . '/app.log');
+}
+
+/**
+ * Load disposable codes from JSON file
+ *
+ * @return array The codes data
+ */
+function loadDisposableCodes() {
+    $file = DISPOSABLE_CODES_FILE;
+    if (!file_exists($file)) {
+        return ['codes' => [], 'metadata' => []];
+    }
+
+    $json = file_get_contents($file);
+    $data = json_decode($json, true);
+    return $data ?: ['codes' => [], 'metadata' => []];
+}
+
+/**
+ * Save disposable codes to JSON file
+ *
+ * @param array $data The codes data
+ * @return bool Success status
+ */
+function saveDisposableCodes($data) {
+    $file = DISPOSABLE_CODES_FILE;
+    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    return file_put_contents($file, $json) !== false;
+}
+
+/**
+ * Check if a disposable code is valid and unused
+ *
+ * @param string $code The code to check
+ * @return array ['valid' => bool, 'used' => bool, 'data' => array]
+ */
+function checkDisposableCode($code) {
+    if (!ENABLE_DISPOSABLE_CODES) {
+        return ['valid' => false, 'used' => false, 'data' => null];
+    }
+
+    $data = loadDisposableCodes();
+
+    if (!isset($data['codes'][$code])) {
+        return ['valid' => false, 'used' => false, 'data' => null];
+    }
+
+    $codeData = $data['codes'][$code];
+    $isUsed = isset($codeData['used']) && $codeData['used'] === true;
+
+    return [
+        'valid' => true,
+        'used' => $isUsed,
+        'data' => $codeData
+    ];
+}
+
+/**
+ * Mark a disposable code as used
+ *
+ * @param string $code The code to mark as used
+ * @return bool Success status
+ */
+function markDisposableCodeAsUsed($code) {
+    if (!ENABLE_DISPOSABLE_CODES) {
+        return false;
+    }
+
+    $data = loadDisposableCodes();
+
+    if (!isset($data['codes'][$code])) {
+        return false;
+    }
+
+    // Mark code as used
+    $data['codes'][$code]['used'] = true;
+    $data['codes'][$code]['used_at'] = date('Y-m-d H:i:s');
+    $data['codes'][$code]['used_ip'] = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+
+    // Update metadata
+    if (!isset($data['metadata']['total_codes_used'])) {
+        $data['metadata']['total_codes_used'] = 0;
+    }
+    $data['metadata']['total_codes_used']++;
+    $data['metadata']['last_updated'] = date('Y-m-d H:i:s');
+
+    return saveDisposableCodes($data);
 }
 
 // ========================================

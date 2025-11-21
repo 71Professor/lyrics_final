@@ -51,7 +51,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Check if code is valid
+        // Check for disposable codes first
+        if (ENABLE_DISPOSABLE_CODES) {
+            $disposableCheck = checkDisposableCode($code);
+
+            if ($disposableCheck['valid']) {
+                // Code exists in disposable codes
+                if ($disposableCheck['used']) {
+                    // Code has already been used
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => '⚠️ This code has already been used and cannot be activated again.'
+                    ]);
+                    exit;
+                }
+
+                // Code is valid and unused - activate it!
+                markDisposableCodeAsUsed($code);
+
+                $_SESSION['premium_active'] = true;
+                $_SESSION['premium_code'] = $code;
+                $_SESSION['premium_activated_at'] = date('Y-m-d H:i:s');
+                $_SESSION['premium_type'] = 'disposable';
+
+                // Optional: Logging
+                if (ENABLE_LOGGING) {
+                    logMessage("Disposable premium code activated: $code", 'info');
+                }
+
+                echo json_encode([
+                    'success' => true,
+                    'message' => '✅ Premium successfully activated! This one-time code has been consumed.',
+                    'isPremium' => true,
+                    'codeType' => 'disposable'
+                ]);
+                exit;
+            }
+        }
+
+        // Check if code is valid in regular premium codes
         $premiumCodes = PREMIUM_CODES;
 
         if (isset($premiumCodes[$code])) {
@@ -59,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['premium_active'] = true;
             $_SESSION['premium_code'] = $code;
             $_SESSION['premium_activated_at'] = date('Y-m-d H:i:s');
+            $_SESSION['premium_type'] = 'regular';
 
             // Optional: Logging
             if (ENABLE_LOGGING) {
@@ -68,7 +108,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode([
                 'success' => true,
                 'message' => 'Premium successfully activated! 🎉',
-                'isPremium' => true
+                'isPremium' => true,
+                'codeType' => 'regular'
             ]);
             exit;
         } else {

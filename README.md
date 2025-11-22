@@ -113,14 +113,10 @@ lyrics_final/
 
 ## 🔓 Premium-System
 
-Das Projekt unterstützt **zwei Arten von Premium-Codes:**
+Das Projekt verwendet **24-Stunden-Premium-Codes:**
 
-### 1. Permanente Codes
-- Unbegrenzte Gültigkeit
-- Verwaltung in `config.php`
-
-### 2. Disposable 24-Stunden-Codes
 - Gültig für 24 Stunden ab Aktivierung
+- Unbegrenzte Generierungen während der 24h
 - Verwaltung über JSON-Datenbank
 - Preis: 5,00 EUR pro Code
 
@@ -151,12 +147,7 @@ define('OPENAI_MODEL', 'gpt-4o');
 // Rate Limiting
 define('MAX_FREE_GENERATIONS', 5);
 
-// Premium-Codes
-define('PREMIUM_CODES', [
-    'METAL2024-DEMO' => 'Demo Code',
-]);
-
-// 24h-Codes
+// 24h Premium-Codes
 define('ENABLE_DISPOSABLE_CODES', true);
 define('DISPOSABLE_CODE_DURATION_HOURS', 24);
 define('DISPOSABLE_CODE_PACKAGE_PRICE', 5.00);

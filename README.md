@@ -26,7 +26,6 @@ Der **Metal Lyrics Generator** nutzt künstliche Intelligenz (OpenAI GPT-4o), um
 - 🌍 **12+ Mythologien:** Japanisch, Chinesisch, Hindu, Aztekisch, Maya, Afrikanisch, Ägyptisch, Mesopotamisch, Occult, Lovecraft, Gothic Horror
 - 🎭 **Erweiterte Strukturen:** Epic, Progressive, Concept Songs
 - 🎵 **Zusätzliche Genres:** Heavy Metal, Metalcore, Gothic Metal
-- 🎨 **Anpassungsoptionen:** Intensität, Sprachstil, Länge
 - 📄 **Export:** TXT, PDF (geplant)
 
 ---
@@ -268,7 +267,6 @@ Dieses Projekt ist unter der MIT-Lizenz lizenziert - siehe [LICENSE](LICENSE) f�
 ## 🔮 Roadmap
 
 - [ ] PDF-Export für Lyrics
-- [ ] Genre-Mixing (z.B. Symphonic Death Metal)
 - [ ] Multi-Language Support (EN, DE, ES)
 - [ ] Spotify-Integration (Lyrics zu Songs)
 - [ ] Mobile App (iOS/Android)

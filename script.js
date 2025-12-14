@@ -254,9 +254,9 @@ const GENRE_DATA = {
         structure: "stories, nature metaphors",
         perspective: "Tradition and cycle. The theme is seen as part of a larger cycle. Ancestors, seasons, rituals, community. Melancholic but connected to roots and heritage.",
         thematic_lens: "How would the ancients have sung about this theme and passed it to their children? What story does it tell?"
-    }
+    },
 
-     heavy: {
+    heavy: {
         name: "Heavy Metal",
         style: "classic, melodic, driving riffs",
         structure: "anthem-like verses, strong choruses",

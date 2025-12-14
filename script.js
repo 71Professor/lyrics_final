@@ -7,7 +7,7 @@
 // ===== KONFIGURATION =====
 const CONFIG = {
     DEMO_MODE: false, // Auf FALSE für echte API-Calls!
-    API_BASE: 'api/', // Basis-URL für API-Calls
+    API_BASE: '/', // Basis-URL für API-Calls
 };
 
 // ===== DOM-ELEMENTE =====

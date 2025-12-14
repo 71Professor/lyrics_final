@@ -17,6 +17,52 @@ define('ADMIN_PASSWORD', 'IhrSicheresPasswort123!'); // ⚠️ ÄNDERN SIE DIES!
 
 session_start();
 
+// ========================================
+// HANDLE DOWNLOAD
+// ========================================
+
+if (isset($_GET['download']) && isset($_SESSION['last_generated_codes'])) {
+    $codes = $_SESSION['last_generated_codes'];
+    $packageName = $_SESSION['last_package_name'] ?? 'Premium Codes';
+    $timestamp = date('Y-m-d_H-i-s');
+
+    // Prepare download content
+    $content = "========================================\n";
+    $content .= "METAL LYRICS GENERATOR - PREMIUM CODES\n";
+    $content .= "========================================\n\n";
+    $content .= "Paket: " . $packageName . "\n";
+    $content .= "Generiert am: " . date('d.m.Y H:i:s') . "\n";
+    $content .= "Anzahl Codes: " . count($codes) . "\n";
+    $content .= "Preis pro Code: " . number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2) . " EUR\n";
+    $content .= "Gültigkeit: 24 Stunden ab Aktivierung\n\n";
+    $content .= "========================================\n";
+    $content .= "CODES\n";
+    $content .= "========================================\n\n";
+
+    foreach ($codes as $i => $code) {
+        $content .= str_pad($i + 1, 3, '0', STR_PAD_LEFT) . ". " . $code . "\n";
+    }
+
+    $content .= "\n========================================\n";
+    $content .= "HINWEISE\n";
+    $content .= "========================================\n\n";
+    $content .= "- Jeder Code kann nur einmal aktiviert werden\n";
+    $content .= "- Nach Aktivierung ist der Code 24 Stunden gültig\n";
+    $content .= "- Geben Sie Codes nur nach erfolgter Zahlung heraus\n";
+    $content .= "- Bewahren Sie diese Datei sicher auf\n\n";
+
+    // Send download headers
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Content-Disposition: attachment; filename="premium-codes_' . $timestamp . '.txt"');
+    header('Content-Length: ' . strlen($content));
+    header('Cache-Control: no-cache, no-store, must-revalidate');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+
+    echo $content;
+    exit;
+}
+
 // Check if password submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
     if ($_POST['password'] === ADMIN_PASSWORD) {
@@ -139,6 +185,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
 
             if ($success) {
                 $generated = true;
+                // Save codes to session for download
+                $_SESSION['last_generated_codes'] = $newCodes;
+                $_SESSION['last_package_name'] = $packageName;
             } else {
                 $error = 'Fehler beim Speichern. Prüfen Sie die Dateiberechtigungen.';
             }
@@ -302,6 +351,20 @@ $availableCodes = $totalCodes - $totalActivated;
             font-size: 12px;
         }
         .copy-btn:hover { background: #666; }
+        .download-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #0a0 0%, #080 100%);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .download-btn:hover { background: linear-gradient(135deg, #0d0 0%, #0a0 100%); }
     </style>
 </head>
 <body>
@@ -341,6 +404,8 @@ $availableCodes = $totalCodes - $totalActivated;
             <div class="success">
                 ✅ <strong>Erfolgreich!</strong> <?php echo count($newCodes); ?> Codes wurden generiert
             </div>
+
+            <a href="?download" class="download-btn">📥 Alle Codes als .txt herunterladen</a>
 
             <div class="codes-list">
                 <h3 style="margin-bottom: 15px;">🔑 Generierte Codes:</h3>

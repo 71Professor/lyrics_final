@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Metal Lyrics Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="grain-overlay"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 class="logo">⚡ METAL LYRICS GENERATOR</h1>
+            <p class="tagline">AI-Powered Lyrics from the Depths of Mythology</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <section class="contact-section">
+            <h2>📧 Contact Us</h2>
+            
+            <div class="contact-grid">
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <h3>🤘 Get in Touch</h3>
+                    <p>
+                        Have questions, feedback, or need support? We'd love to hear from you!
+                    </p>
+
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <h4>📧 Email</h4>
+                            <p>
+                                <a href="mailto:contact@metal-lyrics-ai.com">contact@metal-lyrics-ai.com</a>
+                            </p>
+                            <p class="small-text">Response within 24 hours</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <h4>💬 Support Topics</h4>
+                            <ul>
+                                <li>Technical Issues</li>
+                                <li>Premium Code Activation</li>
+                                <li>Feedback & Feature Requests</li>
+                                <li>Partnerships & Collaborations</li>
+                                <li>Press Inquiries</li>
+                            </ul>
+                        </div>
+
+                        <div class="contact-item">
+                            <h4>💳 Buy Premium Codes</h4>
+                            <p>
+                                Interested in Premium features? Send us an email or visit our 
+                                <a href="index.html#premium">Premium section</a>.
+                            </p>
+                        </div>
+
+                        <div class="contact-item">
+                            <h4>📍 Address</h4>
+                            <p>
+                                [YOUR NAME / COMPANY NAME]<br>
+                                [Street and Number]<br>
+                                [Postal Code] [City]<br>
+                                [Country]
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form-container">
+                    <h3>✉️ Send a Message</h3>
+                    
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                required 
+                                placeholder="Your Name"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                required 
+                                placeholder="your@email.com"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Please select...</option>
+                                <option value="support">Technical Support</option>
+                                <option value="premium">Premium Code / Purchase</option>
+                                <option value="feedback">Feedback / Suggestion</option>
+                                <option value="partnership">Partnership / Collaboration</option>
+                                <option value="press">Press Inquiry</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea 
+                                id="message" 
+                                name="message" 
+                                rows="6" 
+                                required 
+                                placeholder="Your message..."
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="privacy" name="privacy" required>
+                                I have read and accept the <a href="privacy.html" target="_blank">Privacy Policy</a>. *
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            📤 Send Message
+                        </button>
+
+                        <p class="form-note">
+                            * Required fields
+                        </p>
+
+                        <div id="form-message" class="form-message" style="display: none;"></div>
+                    </form>
+
+                    <div class="alternative-contact">
+                        <p class="small-text">
+                            <strong>No form?</strong> Email us directly at: 
+                            <a href="mailto:contact@metal-lyrics-ai.com">contact@metal-lyrics-ai.com</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h3>❓ Frequently Asked Questions (FAQ)</h3>
+                
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>How do I activate my Premium code?</h4>
+                        <p>
+                            Scroll to the Premium section on the <a href="index.html">main page</a>, 
+                            enter your code, and click "Activate".
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>How long is my Premium code valid?</h4>
+                        <p>
+                            24h codes are valid for 24 hours from the first activation. Permanent 
+                            codes have no expiration.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Can I use my code on multiple devices?</h4>
+                        <p>
+                            Yes! During the 24-hour validity period, you can use the code on as many 
+                            devices as you want.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Generation isn't working. What should I do?</h4>
+                        <p>
+                            Check your internet connection and reload the page (Ctrl+F5). If the 
+                            problem persists, contact us via email.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Can I use the generated lyrics commercially?</h4>
+                        <p>
+                            Yes! The generated lyrics belong to you. You can use them freely, even 
+                            for commercial purposes.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Will I receive an invoice for my purchase?</h4>
+                        <p>
+                            Yes, after purchase you'll automatically receive an invoice via email from 
+                            our payment provider (Gumroad/PayPal/Stripe).
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>What mythologies are available for free?</h4>
+                        <p>
+                            Free users can access European mythologies: Norse, Celtic, Greek, and Slavic. 
+                            Premium unlocks 12+ mythologies including Asian, American, African, and occult themes.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>How does the API work? Do you store my lyrics?</h4>
+                        <p>
+                            We use OpenAI's API to generate lyrics. Your input is sent to OpenAI, processed, 
+                            and returned. We don't store the generated lyrics permanently - they're only 
+                            kept in your browser session.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Can I request a refund?</h4>
+                        <p>
+                            Due to the nature of digital goods (Premium codes), refunds are generally not 
+                            available once a code has been activated. If you experience technical issues, 
+                            please contact us for support.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Do you offer bulk discounts for bands/studios?</h4>
+                        <p>
+                            Yes! If you need multiple codes for your band or recording studio, contact us 
+                            at <a href="mailto:contact@metal-lyrics-ai.com">contact@metal-lyrics-ai.com</a> 
+                            for custom pricing.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Can I suggest new mythologies or features?</h4>
+                        <p>
+                            Absolutely! We love feedback from our community. Use the contact form above 
+                            and select "Feedback / Suggestion" to share your ideas.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Is there an API for developers?</h4>
+                        <p>
+                            We're currently developing an API for developers. If you're interested, 
+                            contact us and we'll notify you when it becomes available.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Main Page</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Metal Lyrics Generator | Powered by AI & Mythology</p>
+            <p>
+                <a href="privacy.html">Privacy Policy</a> |
+                <a href="imprint.html">Imprint</a> |
+                <a href="contact.html">Contact</a>
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        .contact-section {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-xl);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .contact-info h3,
+        .contact-form-container h3 {
+            color: var(--color-accent-bright);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.5rem;
+        }
+
+        .contact-details {
+            margin-top: var(--spacing-lg);
+        }
+
+        .contact-item {
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-md);
+            background: var(--color-bg-card);
+            border-left: 3px solid var(--color-accent);
+            border-radius: 4px;
+        }
+
+        .contact-item h4 {
+            color: var(--color-text);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.1rem;
+        }
+
+        .contact-item p {
+            color: var(--color-text);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .contact-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .contact-item li {
+            padding: var(--spacing-xs) 0;
+            color: var(--color-text);
+        }
+
+        .contact-item li::before {
+            content: "▸ ";
+            color: var(--color-accent);
+            font-weight: bold;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: var(--color-bg-card);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--color-border);
+        }
+
+        .contact-form .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form select,
+        .contact-form textarea {
+            width: 100%;
+            padding: var(--spacing-sm);
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            border-radius: var(--border-radius);
+            color: var(--color-text);
+            font-size: 1rem;
+            font-family: var(--font-body);
+            transition: var(--transition);
+        }
+
+        .contact-form input:focus,
+        .contact-form select:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 10px rgba(196, 30, 58, 0.3);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-top: 4px;
+            width: auto;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+            border: none;
+            border-radius: var(--border-radius);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(196, 30, 58, 0.6);
+        }
+
+        .form-note {
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            margin-top: var(--spacing-sm);
+        }
+
+        .form-message {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-message.success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .form-message.error {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .alternative-contact {
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-xl);
+            border-top: 2px solid var(--color-border);
+        }
+
+        .faq-section h3 {
+            color: var(--color-accent-bright);
+            margin-bottom: var(--spacing-lg);
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .faq-item {
+            background: var(--color-bg-card);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--color-border);
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-3px);
+        }
+
+        .faq-item h4 {
+            color: var(--color-accent-bright);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.1rem;
+        }
+
+        .faq-item p {
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .back-link a {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-accent-bright);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        // Simple form handling
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formMessage = document.getElementById('form-message');
+            const submitBtn = e.target.querySelector('.submit-btn');
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Sending...';
+
+            // OPTION 1: Direct mailto link (simple, but opens email client)
+            // Uncomment this for quick implementation:
+            /*
+            const mailtoLink = `mailto:contact@metal-lyrics-ai.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
+            window.location.href = mailtoLink;
+            formMessage.textContent = '✅ Email client opened!';
+            formMessage.className = 'form-message success';
+            formMessage.style.display = 'block';
+            */
+
+            // OPTION 2: Backend submission (requires PHP script)
+            try {
+                const response = await fetch('contact-form.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    formMessage.textContent = '✅ Message sent successfully! We\'ll get back to you soon.';
+                    formMessage.className = 'form-message success';
+                    formMessage.style.display = 'block';
+                    e.target.reset();
+                } else {
+                    throw new Error('Server error');
+                }
+            } catch (error) {
+                formMessage.textContent = '❌ Error sending message. Please email us directly at contact@metal-lyrics-ai.com';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📤 Send Message';
+            }
+
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

@@ -17,6 +17,9 @@ define('ADMIN_PASSWORD', 'IhrSicheresPasswort123!'); // ⚠️ ÄNDERN SIE DIES!
 
 session_start();
 
+// Load config early for download handler
+require_once __DIR__ . '/config.php';
+
 // ========================================
 // HANDLE DOWNLOAD
 // ========================================
@@ -24,6 +27,7 @@ session_start();
 if (isset($_GET['download']) && isset($_SESSION['last_generated_codes'])) {
     $codes = $_SESSION['last_generated_codes'];
     $packageName = $_SESSION['last_package_name'] ?? 'Premium Codes';
+    $packagePrice = $_SESSION['last_package_price'] ?? DISPOSABLE_CODE_PACKAGE_PRICE;
     $timestamp = date('Y-m-d_H-i-s');
 
     // Prepare download content
@@ -33,7 +37,7 @@ if (isset($_GET['download']) && isset($_SESSION['last_generated_codes'])) {
     $content .= "Paket: " . $packageName . "\n";
     $content .= "Generiert am: " . date('d.m.Y H:i:s') . "\n";
     $content .= "Anzahl Codes: " . count($codes) . "\n";
-    $content .= "Preis pro Code: " . number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2) . " EUR\n";
+    $content .= "Preis pro Code: " . number_format($packagePrice, 2) . " EUR\n";
     $content .= "Gültigkeit: 24 Stunden ab Aktivierung\n\n";
     $content .= "========================================\n";
     $content .= "CODES\n";
@@ -117,7 +121,7 @@ if (!isset($_SESSION['admin_authenticated'])) {
 // LOAD CONFIGURATION
 // ========================================
 
-require_once __DIR__ . '/config.php';
+// Config already loaded at top for download handler
 
 // Check if disposable codes are enabled
 if (!ENABLE_DISPOSABLE_CODES) {
@@ -188,6 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
                 // Save codes to session for download
                 $_SESSION['last_generated_codes'] = $newCodes;
                 $_SESSION['last_package_name'] = $packageName;
+                $_SESSION['last_package_price'] = DISPOSABLE_CODE_PACKAGE_PRICE;
             } else {
                 $error = 'Fehler beim Speichern. Prüfen Sie die Dateiberechtigungen.';
             }

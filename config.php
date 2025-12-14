@@ -23,7 +23,7 @@
  *
  * IMPORTANT: Only enter the key here, NOT in other files!
  */
-define('OPENAI_API_KEY', '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');
+define('OPENAI_API_KEY', 'my api key here');
 
 /**
  * OpenAI Model Selection

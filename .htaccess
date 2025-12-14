@@ -20,6 +20,12 @@
     Deny from all
 </FilesMatch>
 
+# Block direct access to CLI code generator
+<Files "generate-disposable-codes.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
 # Prevent directory listing
 Options -Indexes
 

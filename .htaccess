@@ -1,0 +1,31 @@
+# ========================================
+# METAL LYRICS GENERATOR - SECURITY
+# ========================================
+
+# Block direct access to config.php
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block access to disposable codes file
+<Files "disposable_codes.json">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block access to log files
+<FilesMatch "\.(log|txt)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes
+
+# Additional security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>

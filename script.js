@@ -6,7 +6,7 @@
 
 // ===== KONFIGURATION =====
 const CONFIG = {
-    DEMO_MODE: true, // Auf FALSE für echte API-Calls!
+    DEMO_MODE: false, // Auf FALSE für echte API-Calls!
     API_BASE: 'api/', // Basis-URL für API-Calls
 };
 

@@ -1,12 +1,16 @@
 <?php
 /**
- * METAL LYRICS GENERATOR - CONFIGURATION
+ * METAL LYRICS GENERATOR - CONFIGURATION TEMPLATE
  *
- * ⚠️ IMPORTANT: This file contains your API key!
- * NEVER share publicly or upload to Git!
+ * ⚠️ IMPORTANT: This is a template file!
  *
- * Add this file to .gitignore:
- * echo "api/config.php" >> .gitignore
+ * SETUP INSTRUCTIONS:
+ * 1. Copy this file to "config.php"
+ * 2. Enter your OpenAI API Key
+ * 3. Add your Premium Codes
+ * 4. Save and upload to your server
+ *
+ * NEVER share config.php publicly or upload to Git!
  */
 
 // ========================================
@@ -23,7 +27,7 @@
  *
  * IMPORTANT: Only enter the key here, NOT in other files!
  */
-define('OPENAI_API_KEY', 'my api key here');
+define('OPENAI_API_KEY', 'sk-proj-YOUR-API-KEY-HERE');
 
 /**
  * OpenAI Model Selection
@@ -69,19 +73,8 @@ define('ENABLE_RATE_LIMITING', false);
  */
 define('PREMIUM_CODES', [
     'METAL2024-DEMO'  => 'Demo Premium Code',
-    'METAL2024-VIP'   => 'VIP Access',
-    'METAL-7X9K3NQPR4WZ'
-'METAL-2H8V5TMYA6DR'
-'METAL-K4P9S3XZ7QBN'
-'METAL-M6R2W8FJ5TYH'
-'METAL-3N7Q9KVX2PDS'
-'METAL-F5W8R4BY9JMT'
-'METAL-9D2H6NP3SXKQ'
-'METAL-Y7M4T8WR2VFJ'
-'METAL-Q3K9S6HN8PDX'
-'METAL-8B5W2TJ7FYRM',
-
-    // Add more codes here
+    // Add your codes here:
+    // 'METAL2024-VIP'   => 'VIP Access',
     // 'METAL2024-ABC123' => 'User: John Doe',
 ]);
 

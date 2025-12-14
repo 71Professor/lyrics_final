@@ -1,0 +1,29 @@
+# ========================================
+# METAL LYRICS GENERATOR - GIT IGNORE
+# ========================================
+
+# CRITICAL: Configuration files with API keys
+config.php
+
+# Disposable codes (contains sensitive data)
+disposable_codes.json
+
+# Log files
+logs/
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.bak
+*.cache

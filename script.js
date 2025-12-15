@@ -194,6 +194,46 @@ const MYTHOLOGY_DATA = {
         keywords: ["Zeus", "Hades", "Olympus", "Titans", "Underworld", "Lightning", "Fates", "Heroes", "Hydra", "Medusa"],
         tone: "heroic, dramatic, divine"
     },
+    slavic: {
+        name: "Slavic",
+        keywords: ["Perun", "Baba Yaga", "Chernobog", "Mokosh", "Leshy", "Firebird", "Vodyanoy", "Dark Forest", "Thunder God", "Ancient Magic"],
+        tone: "mystical, dark, nature-bound"
+    },
+    japanese: {
+        name: "Japanese",
+        keywords: ["Samurai", "Yokai", "Bushido", "Oni", "Kitsune", "Katana", "Cherry Blossoms", "Honor", "Ronin", "Spirits"],
+        tone: "honorable, spiritual, disciplined"
+    },
+    chinese: {
+        name: "Chinese",
+        keywords: ["Dragons", "Dao", "Jade Emperor", "Phoenix", "Yin Yang", "Qilin", "Immortals", "Heavenly Palace", "Chi", "Ancient Wisdom"],
+        tone: "philosophical, harmonious, powerful"
+    },
+    hindu: {
+        name: "Hindu",
+        keywords: ["Shiva", "Kali", "Vishnu", "Brahma", "Karma", "Chakras", "Ganesh", "Sacred Fire", "Destruction", "Rebirth"],
+        tone: "cosmic, cyclical, powerful"
+    },
+    aztec: {
+        name: "Aztec",
+        keywords: ["Quetzalcoatl", "Blood Sacrifice", "Tenochtitlan", "Jaguar Warriors", "Sun Stone", "Obsidian", "Temples", "Eagle Knights", "Sacred Blood"],
+        tone: "brutal, ritualistic, solar"
+    },
+    mayan: {
+        name: "Mayan",
+        keywords: ["Kukulkan", "Xibalba", "Death Lords", "Pyramids", "Jaguar God", "Underworld", "Sacred Cenote", "Ball Game", "Time Cycles"],
+        tone: "mysterious, death-focused, astronomical"
+    },
+    african: {
+        name: "African",
+        keywords: ["Anansi", "Orishas", "Shango", "Ancestral Spirits", "Drums", "Savanna", "Lions", "Tribal Warriors", "Ancient Wisdom", "Oya"],
+        tone: "tribal, rhythmic, ancestral"
+    },
+    mesopotamian: {
+        name: "Mesopotamian",
+        keywords: ["Gilgamesh", "Ishtar", "Enkidu", "Ziggurat", "Tiamat", "Ancient Kings", "Epic Quests", "Babylonian Gates", "Eternal Life"],
+        tone: "ancient, epic, monumental"
+    },
     occult: {
         name: "Occult",
         keywords: ["Demons", "Rituals", "Pentagrams", "Blood Moon", "Dark Arts", "Summoning", "Unholy", "Cursed", "Shadows", "Necromancy"],
@@ -208,6 +248,11 @@ const MYTHOLOGY_DATA = {
         name: "Lovecraft",
         keywords: ["Cthulhu", "Elder Gods", "Madness", "Eldritch", "R'lyeh", "Tentacles", "Cosmic Horror", "Ancient Ones", "Insanity"],
         tone: "insane, cosmic, ancient horror"
+    },
+    gothic: {
+        name: "Gothic Horror",
+        keywords: ["Vampires", "Castles", "Moonlight", "Blood", "Gargoyles", "Crypts", "Bats", "Eternal Night", "Victorian Darkness", "Cursed Nobility"],
+        tone: "elegant, dark, romantic horror"
     }
 };
 

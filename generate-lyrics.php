@@ -4,7 +4,8 @@
  * OpenAI ChatGPT Integration mit erweiterten Mythologien & Strukturen
  */
 
-require_once 'config.php';
+require_once __DIR__ . '/env-loader.php';
+require_once __DIR__ . '/config.php';
 
 // CORS Headers
 header('Access-Control-Allow-Origin: *');

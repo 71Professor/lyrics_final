@@ -4,7 +4,8 @@
  * Validates Premium codes and manages Premium status
  */
 
-require_once 'config.php';
+require_once __DIR__ . '/env-loader.php';
+require_once __DIR__ . '/config.php';
 
 // CORS & Headers
 header('Access-Control-Allow-Origin: *');

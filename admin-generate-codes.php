@@ -18,6 +18,7 @@ define('ADMIN_PASSWORD', 'IhrSicheresPasswort123!'); // ⚠️ ÄNDERN SIE DIES!
 session_start();
 
 // Load config early for download handler
+require_once __DIR__ . '/env-loader.php';
 require_once __DIR__ . '/config.php';
 
 // ========================================

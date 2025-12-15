@@ -15,6 +15,7 @@
  *   php generate-disposable-codes.php (generates 10 codes by default)
  */
 
+require_once __DIR__ . '/env-loader.php';
 require_once __DIR__ . '/config.php';
 
 // ========================================

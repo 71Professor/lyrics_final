@@ -4,6 +4,7 @@
 
 # CRITICAL: Configuration files with API keys
 config.php
+.env
 
 # Disposable codes (contains sensitive data)
 disposable_codes.json

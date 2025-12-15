@@ -14,20 +14,63 @@
  */
 
 // ========================================
+// LOAD ENVIRONMENT VARIABLES (RECOMMENDED)
+// ========================================
+
+/**
+ * Load .env file if it exists (RECOMMENDED METHOD)
+ *
+ * This is the most secure way to manage API keys:
+ * 1. Create a .env file (copy from .env.example)
+ * 2. Add your API key there: OPENAI_API_KEY=sk-proj-...
+ * 3. The .env file is automatically ignored by Git
+ *
+ * If no .env file exists, the config below will be used as fallback.
+ */
+if (file_exists(__DIR__ . '/.env')) {
+    $envFile = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($envFile as $line) {
+        // Skip comments and empty lines
+        if (strpos(trim($line), '#') === 0 || empty(trim($line))) {
+            continue;
+        }
+
+        // Parse KEY=VALUE format
+        if (strpos($line, '=') !== false) {
+            list($key, $value) = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+
+            // Remove quotes if present
+            $value = trim($value, '"\'');
+
+            // Set as environment variable
+            putenv("$key=$value");
+            $_ENV[$key] = $value;
+            $_SERVER[$key] = $value;
+        }
+    }
+}
+
+// ========================================
 // OPENAI API SETTINGS
 // ========================================
 
 /**
  * OpenAI API Key
  *
+ * RECOMMENDED: Use .env file (see above)
+ * ALTERNATIVE: Enter key directly here
+ *
  * Where to get the key?
  * 1. Go to: https://platform.openai.com/api-keys
  * 2. Create a new API Key
- * 3. Copy the key here (starts with "sk-proj-...")
+ * 3a. RECOMMENDED: Add to .env file: OPENAI_API_KEY=sk-proj-...
+ * 3b. ALTERNATIVE: Enter here (starts with "sk-proj-...")
  *
  * IMPORTANT: Only enter the key here, NOT in other files!
  */
-define('OPENAI_API_KEY', 'sk-proj-YOUR-API-KEY-HERE');
+define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: 'sk-proj-YOUR-API-KEY-HERE');
 
 /**
  * OpenAI Model Selection
@@ -45,7 +88,7 @@ define('OPENAI_API_KEY', 'sk-proj-YOUR-API-KEY-HERE');
  * Average lyrics = ~600 Tokens
  * → gpt-4o: ~$0.01 per generation ✅
  */
-define('OPENAI_MODEL', 'gpt-4o');
+define('OPENAI_MODEL', getenv('OPENAI_MODEL') ?: 'gpt-4o');
 
 // ========================================
 // PREMIUM & RATE LIMITING
@@ -63,7 +106,7 @@ define('MAX_FREE_GENERATIONS', 5);
  *
  * Requires: Session or database for tracking
  */
-define('ENABLE_RATE_LIMITING', false);
+define('ENABLE_RATE_LIMITING', getenv('ENABLE_RATE_LIMITING') === 'true' ? true : false);
 
 /**
  * Premium Codes
@@ -101,7 +144,7 @@ define('DISPOSABLE_CODE_DURATION_HOURS', 24); // Gültigkeitsdauer in Stunden
  * IMPORTANT: Create the "logs" folder in the api/ directory!
  * And set permissions to 755
  */
-define('ENABLE_LOGGING', false);
+define('ENABLE_LOGGING', getenv('ENABLE_LOGGING') === 'true' ? true : false);
 
 /**
  * Debug mode
@@ -110,7 +153,7 @@ define('ENABLE_LOGGING', false);
  * ⚠️ Only enable during development!
  * ALWAYS false on live server!
  */
-define('DEBUG_MODE', false);
+define('DEBUG_MODE', getenv('DEBUG_MODE') === 'true' ? true : false);
 
 if (DEBUG_MODE) {
     error_reporting(E_ALL);

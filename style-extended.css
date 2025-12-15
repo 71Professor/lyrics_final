@@ -481,6 +481,25 @@ select option::before {
 .upgrade-prompt .close-btn:hover {
     opacity: 1;
 }
+/* ============================================
+   INFO BOX – CLARIFIED AI ROLE
+   ============================================ */
+
+.info-headline {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.4rem;
+    color: var(--color-text);
+    text-align: center;
+}
+
+.info-subline {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    text-align: center;
+}
 
 /* ============================================
    ENDE ERWEITERTE STYLES

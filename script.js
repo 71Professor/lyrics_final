@@ -20,6 +20,7 @@ const lyricsTitle = document.getElementById('lyrics-title');
 const lyricsContent = document.getElementById('lyrics-content');
 const resultMythology = document.getElementById('result-mythology');
 const resultGenre = document.getElementById('result-genre');
+const resultStructure = document.getElementById('result-structure');
 const copyBtn = document.getElementById('copy-btn');
 const regenerateBtn = document.getElementById('regenerate-btn');
 const newThemeBtn = document.getElementById('new-theme-btn');
@@ -176,6 +177,16 @@ const PREMIUM_MYTHOLOGIES = [
 
 // ===== PREMIUM STRUCTURE LIST =====
 const PREMIUM_STRUCTURES = ['long', 'epic', 'progressive', 'concept'];
+
+// ===== STRUCTURE NAMES =====
+const STRUCTURE_NAMES = {
+    short: "Short",
+    medium: "Medium",
+    long: "Long",
+    epic: "Epic",
+    progressive: "Progressive",
+    concept: "Concept"
+};
 
 // ===== MYTHOLOGY DATA (erweitert) =====
 const MYTHOLOGY_DATA = {
@@ -548,7 +559,7 @@ form.addEventListener('submit', async (e) => {
 
     try {
         const lyrics = await generateLyrics(mythology, genre, theme, structure);
-        displayLyrics(lyrics, mythology, genre);
+        displayLyrics(lyrics, mythology, genre, structure);
         updateUsageDisplay();
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -567,11 +578,12 @@ form.addEventListener('submit', async (e) => {
 });
 
 // ===== HELPER FUNCTIONS =====
-function displayLyrics(lyrics, mythology, genre) {
+function displayLyrics(lyrics, mythology, genre, structure) {
     lyricsTitle.textContent = lyrics.title;
     lyricsContent.textContent = lyrics.content;
     resultMythology.textContent = MYTHOLOGY_DATA[mythology].name;
     resultGenre.textContent = GENRE_DATA[genre].name;
+    resultStructure.textContent = STRUCTURE_NAMES[structure] || structure;
     resultsSection.style.display = 'block';
 }
 

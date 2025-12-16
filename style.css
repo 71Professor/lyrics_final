@@ -113,6 +113,32 @@ header {
     box-shadow: 0 4px 20px rgba(196, 30, 58, 0.3);
 }
 
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.header-text {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+}
+
+.header-logo {
+    max-width: 120px;
+    height: auto;
+    object-fit: contain;
+    transition: var(--transition);
+}
+
+.header-logo:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 10px rgba(196, 30, 58, 0.6));
+}
+
 .logo {
     font-size: 3rem;
     margin-bottom: var(--spacing-xs);
@@ -514,28 +540,64 @@ footer a {
     h1 {
         font-size: 2rem;
     }
-    
+
     h2 {
         font-size: 1.5rem;
     }
-    
+
     .logo {
         font-size: 2rem;
     }
-    
+
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .header-logo {
+        max-width: 80px;
+    }
+
+    .header-logo-right {
+        order: 3;
+    }
+
+    .header-text {
+        order: 2;
+    }
+
+    .header-logo-left {
+        order: 1;
+    }
+
     .examples-grid,
     .premium-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .lyrics-header {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--spacing-sm);
     }
-    
+
     .action-buttons {
         flex-direction: column;
+    }
+}
+
+/* Extra kleine Geräte */
+@media (max-width: 480px) {
+    .header-logo {
+        max-width: 60px;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .tagline {
+        font-size: 0.9rem;
     }
 }
 

@@ -146,7 +146,7 @@
                     <div class="alternative-contact">
                         <p class="small-text">
                             <strong>Kein Formular?</strong> Schreib uns direkt an: 
-                            <a href="mailto:contact@metal-lyrics-ai.com">contact@metal-lyrics-ai.com</a>
+                            <a href="mailto:hallo@digitales-und-bildung.de">hallo@digitales-und-bildung.de</a>
                         </p>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
                         <h4>Bekomme ich eine Rechnung für meinen Kauf?</h4>
                         <p>
                             Ja, nach dem Kauf erhältst du automatisch eine Rechnung per E-Mail von unserem 
-                            Payment-Provider (Gumroad/PayPal/Stripe).
+                            Payment-Provider (Gumroad).
                         </p>
                     </div>
                 </div>
@@ -492,7 +492,7 @@
             // OPTION 1: Direct mailto link (simple, but opens email client)
             // Uncomment this for quick implementation:
             /*
-            const mailtoLink = `mailto:contact@metal-lyrics-ai.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nNachricht:\n${formData.message}`)}`;
+            const mailtoLink = `mailto:hallo@digitales-und-bildung.de?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nNachricht:\n${formData.message}`)}`;
             window.location.href = mailtoLink;
             formMessage.textContent = '✅ E-Mail-Client wurde geöffnet!';
             formMessage.className = 'form-message success';
@@ -519,7 +519,7 @@
                     throw new Error('Server error');
                 }
             } catch (error) {
-                formMessage.textContent = '❌ Fehler beim Senden. Bitte schreib uns direkt an contact@metal-lyrics-ai.com';
+                formMessage.textContent = '❌ Fehler beim Senden. Bitte schreib uns direkt an hallo@digitales-und-bildung.de';
                 formMessage.className = 'form-message error';
                 formMessage.style.display = 'block';
             } finally {

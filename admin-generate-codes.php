@@ -35,7 +35,8 @@ if (!empty($adminPasswordPlain) && empty($adminPasswordHash)) {
 // AUTHENTICATION
 // ========================================
 
-session_start();
+require_once __DIR__ . '/session-security.php';
+startSecureSession();
 
 // Load config early for download handler
 require_once __DIR__ . '/env-loader.php';
@@ -109,8 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
     if ($authenticated) {
         $_SESSION['admin_authenticated'] = true;
 
-        // Session-ID regenerieren für zusätzliche Sicherheit
-        session_regenerate_id(true);
+        // Session-ID regenerieren für zusätzliche Sicherheit gegen Session Fixation
+        regenerateSessionAfterLogin();
     } else {
         $error = 'Falsches Passwort!';
 

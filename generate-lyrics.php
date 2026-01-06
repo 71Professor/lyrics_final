@@ -7,11 +7,71 @@
 require_once __DIR__ . '/env-loader.php';
 require_once __DIR__ . '/config.php';
 
-// CORS Headers
-header('Access-Control-Allow-Origin: *');
+// ========================================
+// SECURE CORS CONFIGURATION
+// ========================================
+// Get allowed domain from environment
+$allowedDomain = getenv('ALLOWED_DOMAIN') ?: 'localhost';
+
+// Validate Origin header
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigins = [
+    'http://' . $allowedDomain,
+    'https://' . $allowedDomain,
+    'http://localhost',
+    'http://localhost:8000',
+    'http://localhost:3000',
+    'http://127.0.0.1',
+    'https://localhost',
+];
+
+// Check if origin is allowed
+$isOriginAllowed = false;
+foreach ($allowedOrigins as $allowedOrigin) {
+    if (strpos($origin, $allowedOrigin) === 0) {
+        $isOriginAllowed = true;
+        header('Access-Control-Allow-Origin: ' . $origin);
+        break;
+    }
+}
+
+// If no valid origin, block CORS (but allow same-origin requests)
+if (!$isOriginAllowed && !empty($origin)) {
+    // Referer check as additional security layer
+    $referer = $_SERVER['HTTP_REFERER'] ?? '';
+    $refererValid = false;
+
+    foreach ($allowedOrigins as $allowedOrigin) {
+        if (strpos($referer, $allowedOrigin) === 0) {
+            $refererValid = true;
+            break;
+        }
+    }
+
+    if (!$refererValid) {
+        http_response_code(403);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'error' => 'Forbidden',
+            'message' => 'Origin not allowed'
+        ]);
+        exit;
+    }
+}
+
+// CORS headers (only if origin is allowed)
+if ($isOriginAllowed) {
+    header('Access-Control-Allow-Credentials: true');
+}
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Content-Type: application/json; charset=utf-8');
+
+// Security headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
 
 // Session starten
 session_start();

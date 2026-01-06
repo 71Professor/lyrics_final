@@ -222,12 +222,6 @@ $allowedGenres = [
     'epic_doom', 'speed_metal', 'groove_metal', 'industrial_metal', 'unknown'
 ];
 
-$allowedThemes = [
-    'war', 'mythology', 'nature', 'cosmos', 'apocalypse', 'heroism',
-    'betrayal', 'vengeance', 'destiny', 'rebirth', 'chaos', 'creation',
-    'destruction', 'journey', 'battle', 'gods', 'death', 'honor', 'unknown'
-];
-
 $allowedStructures = [
     'short', 'medium', 'long', 'epic', 'progressive', 'concept'
 ];
@@ -244,8 +238,19 @@ $allowedLanguageStyles = [
 $prompt = trim($input['prompt']);
 $mythology = validateWhitelist($input['mythology'] ?? 'unknown', $allowedMythologies, 'unknown');
 $genre = validateWhitelist($input['genre'] ?? 'unknown', $allowedGenres, 'unknown');
-$theme = validateWhitelist($input['theme'] ?? 'unknown', $allowedThemes, 'unknown');
 $structure = validateWhitelist($input['structure'] ?? 'medium', $allowedStructures, 'medium');
+
+// Validate theme with length constraint only (max 50 characters)
+$theme = isset($input['theme']) ? trim($input['theme']) : 'unknown';
+$themeValidation = validateLength($theme, 1, 50, 'Theme');
+if (!$themeValidation['valid']) {
+    http_response_code(400);
+    echo json_encode([
+        'error' => 'Bad Request',
+        'message' => $themeValidation['error']
+    ]);
+    exit;
+}
 
 // Validate options
 $options = [];

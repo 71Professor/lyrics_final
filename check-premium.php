@@ -6,6 +6,7 @@
 
 require_once __DIR__ . '/env-loader.php';
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/session-security.php';
 
 // ========================================
 // SECURE CORS CONFIGURATION
@@ -73,8 +74,8 @@ header('X-Frame-Options: DENY');
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
-// Session starten für Premium-Status
-session_start();
+// Session starten mit Sicherheitsmaßnahmen
+startSecureSession();
 
 // Preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -158,6 +159,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_SESSION['premium_expires_at'] = $disposableCheck['data']['expires_at'];
                         $_SESSION['premium_type'] = 'disposable';
 
+                        // Regenerate session after privilege escalation (anti-session-fixation)
+                        regenerateSessionAfterLogin();
+
                         echo json_encode([
                             'success' => true,
                             'message' => "✅ Premium activated! Code is valid for {$remainingHours} more hours.",
@@ -181,6 +185,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['premium_activated_at'] = $now;
                 $_SESSION['premium_expires_at'] = $expiresAt;
                 $_SESSION['premium_type'] = 'disposable';
+
+                // Regenerate session after privilege escalation (anti-session-fixation)
+                regenerateSessionAfterLogin();
 
                 // Optional: Logging
                 if (ENABLE_LOGGING) {
@@ -208,6 +215,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['premium_code'] = $code;
             $_SESSION['premium_activated_at'] = date('Y-m-d H:i:s');
             $_SESSION['premium_type'] = 'regular';
+
+            // Regenerate session after privilege escalation (anti-session-fixation)
+            regenerateSessionAfterLogin();
 
             // Optional: Logging
             if (ENABLE_LOGGING) {

@@ -6,6 +6,7 @@
 
 require_once __DIR__ . '/env-loader.php';
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/session-security.php';
 
 // ========================================
 // SECURE CORS CONFIGURATION
@@ -73,8 +74,8 @@ header('X-Frame-Options: DENY');
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
-// Session starten
-session_start();
+// Session starten mit Sicherheitsmaßnahmen
+startSecureSession();
 
 // Preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {

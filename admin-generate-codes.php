@@ -7,9 +7,28 @@
  */
 
 // ========================================
-// SECURITY: SET YOUR PASSWORD HERE!
+// SECURITY: PASSWORD CONFIGURATION
 // ========================================
-define('ADMIN_PASSWORD', 'IhrSicheresPasswort123!'); // ⚠️ ÄNDERN SIE DIES!
+// Passwort wird jetzt aus .env geladen!
+// Siehe .env.example für Anleitung zur Hash-Generierung
+
+// Passwort-Hash aus .env laden (empfohlen)
+$adminPasswordHash = getenv('ADMIN_PASSWORD_HASH');
+
+// FALLBACK: Klartext-Passwort (NICHT EMPFOHLEN für Produktion!)
+$adminPasswordPlain = getenv('ADMIN_PASSWORD_PLAIN');
+
+// Validierung: Mindestens eine Methode muss konfiguriert sein
+if (empty($adminPasswordHash) && empty($adminPasswordPlain)) {
+    die('❌ SECURITY ERROR: Kein Admin-Passwort konfiguriert!<br><br>
+         Bitte setze entweder ADMIN_PASSWORD_HASH oder ADMIN_PASSWORD_PLAIN in der .env Datei.<br>
+         <a href="SECURITY.md">Siehe SECURITY.md für Anleitung</a>');
+}
+
+// Warnung bei Klartext-Passwort anzeigen
+if (!empty($adminPasswordPlain) && empty($adminPasswordHash)) {
+    $showSecurityWarning = true;
+}
 
 // ========================================
 // AUTHENTICATION
@@ -70,10 +89,34 @@ if (isset($_GET['download']) && isset($_SESSION['last_generated_codes'])) {
 
 // Check if password submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
-    if ($_POST['password'] === ADMIN_PASSWORD) {
+    $inputPassword = $_POST['password'];
+    $authenticated = false;
+
+    // Methode 1: Hash-Vergleich (SICHER)
+    if (!empty($adminPasswordHash)) {
+        if (password_verify($inputPassword, $adminPasswordHash)) {
+            $authenticated = true;
+        }
+    }
+    // Methode 2: Klartext-Vergleich (FALLBACK, UNSICHER)
+    elseif (!empty($adminPasswordPlain)) {
+        if ($inputPassword === $adminPasswordPlain) {
+            $authenticated = true;
+        }
+    }
+
+    if ($authenticated) {
         $_SESSION['admin_authenticated'] = true;
+
+        // Session-ID regenerieren für zusätzliche Sicherheit
+        session_regenerate_id(true);
     } else {
         $error = 'Falsches Passwort!';
+
+        // Optional: Logging von fehlgeschlagenen Login-Versuchen
+        if (ENABLE_LOGGING) {
+            logMessage('Failed admin login attempt from IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 'warning');
+        }
     }
 }
 
@@ -380,6 +423,20 @@ $availableCodes = $totalCodes - $totalActivated;
             <h1>🔐 Disposable Code Generator</h1>
             <p>Metal Lyrics Generator - Admin Panel</p>
         </div>
+
+        <?php if (isset($showSecurityWarning) && $showSecurityWarning): ?>
+            <div class="error" style="margin-bottom: 20px;">
+                ⚠️ <strong>SICHERHEITSWARNUNG:</strong> Du verwendest ein Klartext-Passwort!
+                <br><br>
+                <strong>Empfehlung:</strong> Generiere einen Passwort-Hash:
+                <br>
+                <code style="background: #1a1a1a; padding: 10px; display: block; margin: 10px 0; border-radius: 5px;">
+                php -r "echo password_hash('DeinPasswort', PASSWORD_BCRYPT);"
+                </code>
+                Füge den Hash dann als <code>ADMIN_PASSWORD_HASH</code> in die .env Datei ein und entferne <code>ADMIN_PASSWORD_PLAIN</code>.
+            </div>
+        <?php endif; ?>
+
 
         <div class="stats">
             <div class="stat-box">

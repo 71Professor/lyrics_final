@@ -8,6 +8,12 @@
     Deny from all
 </Files>
 
+# Block direct access to .env files (CRITICAL SECURITY!)
+<FilesMatch "^\.env">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
 # Block access to disposable codes file
 <Files "disposable_codes.json">
     Order Allow,Deny
@@ -20,11 +26,11 @@
     Deny from all
 </FilesMatch>
 
-# Block direct access to CLI code generator
-<Files "generate-disposable-codes.php">
+# Block direct access to CLI scripts
+<FilesMatch "^(generate-disposable-codes|generate-password-hash|view-code-statistics)\.php$">
     Order Allow,Deny
     Deny from all
-</Files>
+</FilesMatch>
 
 # Prevent directory listing
 Options -Indexes

@@ -122,9 +122,72 @@ if (!$isPremium) {
     }
 }
 
+// ===== INPUT VALIDATION & SECURITY =====
+
+/**
+ * Sanitize string for logging to prevent log injection
+ */
+function sanitizeForLog($value) {
+    // Remove newlines and control characters
+    $sanitized = preg_replace('/[\x00-\x1F\x7F]/', '', (string)$value);
+    // Limit length
+    return mb_substr($sanitized, 0, 200);
+}
+
+/**
+ * Validate input against whitelist
+ */
+function validateWhitelist($value, $allowedValues, $default) {
+    if (!is_string($value)) {
+        return $default;
+    }
+    return in_array($value, $allowedValues, true) ? $value : $default;
+}
+
+/**
+ * Validate string length
+ */
+function validateLength($value, $minLength, $maxLength, $fieldName) {
+    if (!is_string($value)) {
+        return [
+            'valid' => false,
+            'error' => "$fieldName must be a string"
+        ];
+    }
+
+    $length = mb_strlen($value);
+
+    if ($length < $minLength) {
+        return [
+            'valid' => false,
+            'error' => "$fieldName must be at least $minLength characters"
+        ];
+    }
+
+    if ($length > $maxLength) {
+        return [
+            'valid' => false,
+            'error' => "$fieldName must not exceed $maxLength characters"
+        ];
+    }
+
+    return ['valid' => true];
+}
+
 // ===== REQUEST VALIDATION =====
 $input = json_decode(file_get_contents('php://input'), true);
 
+// Check JSON parsing
+if (json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
+    echo json_encode([
+        'error' => 'Bad Request',
+        'message' => 'Invalid JSON format'
+    ]);
+    exit;
+}
+
+// Validate prompt exists
 if (!isset($input['prompt']) || empty($input['prompt'])) {
     http_response_code(400);
     echo json_encode([
@@ -134,12 +197,77 @@ if (!isset($input['prompt']) || empty($input['prompt'])) {
     exit;
 }
 
-$prompt = $input['prompt'];
-$mythology = $input['mythology'] ?? 'unknown';
-$genre = $input['genre'] ?? 'unknown';
-$theme = $input['theme'] ?? 'unknown';
-$structure = $input['structure'] ?? 'medium';
-$options = $input['options'] ?? [];
+// Validate prompt length (min 3, max 5000 characters)
+$promptValidation = validateLength($input['prompt'], 3, 5000, 'Prompt');
+if (!$promptValidation['valid']) {
+    http_response_code(400);
+    echo json_encode([
+        'error' => 'Bad Request',
+        'message' => $promptValidation['error']
+    ]);
+    exit;
+}
+
+// Define whitelists for all enum values
+$allowedMythologies = [
+    'nordic', 'greek', 'egyptian', 'celtic', 'mesopotamian', 'slavic',
+    'japanese', 'hindu', 'aztec', 'mayan', 'native_american', 'polynesian',
+    'african', 'chinese', 'persian', 'aboriginal', 'unknown'
+];
+
+$allowedGenres = [
+    'death_metal', 'black_metal', 'thrash_metal', 'doom_metal', 'power_metal',
+    'folk_metal', 'viking_metal', 'symphonic_metal', 'melodic_death',
+    'progressive_metal', 'technical_death', 'blackened_death', 'funeral_doom',
+    'epic_doom', 'speed_metal', 'groove_metal', 'industrial_metal', 'unknown'
+];
+
+$allowedThemes = [
+    'war', 'mythology', 'nature', 'cosmos', 'apocalypse', 'heroism',
+    'betrayal', 'vengeance', 'destiny', 'rebirth', 'chaos', 'creation',
+    'destruction', 'journey', 'battle', 'gods', 'death', 'honor', 'unknown'
+];
+
+$allowedStructures = [
+    'short', 'medium', 'long', 'epic', 'progressive', 'concept'
+];
+
+$allowedIntensities = [
+    'moderate', 'high', 'extreme'
+];
+
+$allowedLanguageStyles = [
+    'archaic', 'modern', 'poetic', 'brutal'
+];
+
+// Validate and sanitize all inputs
+$prompt = trim($input['prompt']);
+$mythology = validateWhitelist($input['mythology'] ?? 'unknown', $allowedMythologies, 'unknown');
+$genre = validateWhitelist($input['genre'] ?? 'unknown', $allowedGenres, 'unknown');
+$theme = validateWhitelist($input['theme'] ?? 'unknown', $allowedThemes, 'unknown');
+$structure = validateWhitelist($input['structure'] ?? 'medium', $allowedStructures, 'medium');
+
+// Validate options
+$options = [];
+if (isset($input['options']) && is_array($input['options'])) {
+    // Validate intensity
+    if (isset($input['options']['intensity'])) {
+        $options['intensity'] = validateWhitelist(
+            $input['options']['intensity'],
+            $allowedIntensities,
+            'high'
+        );
+    }
+
+    // Validate language style
+    if (isset($input['options']['languageStyle'])) {
+        $options['languageStyle'] = validateWhitelist(
+            $input['options']['languageStyle'],
+            $allowedLanguageStyles,
+            'archaic'
+        );
+    }
+}
 
 // ===== TOKEN BERECHNUNG BASIEREND AUF STRUKTUR =====
 $tokenLimits = [
@@ -251,14 +379,14 @@ if (!isset($result['choices'][0]['message']['content'])) {
 
 $lyricsText = $result['choices'][0]['message']['content'];
 
-// ===== TITEL EXTRAHIEREN =====
+// ===== TITEL EXTRAHIEREN (with length validation) =====
 $lines = explode("\n", $lyricsText);
 $titleLine = null;
 $title = 'Untitled';
 
 foreach (array_slice($lines, 0, 5) as $line) {
     $line = trim($line);
-    
+
     if (preg_match('/^Title:\s*(.+)$/i', $line, $matches)) {
         $title = trim($matches[1]);
         $titleLine = $line;
@@ -272,6 +400,11 @@ foreach (array_slice($lines, 0, 5) as $line) {
         $titleLine = $line;
         break;
     }
+}
+
+// Limit title length to prevent excessively long titles (max 200 chars)
+if (mb_strlen($title) > 200) {
+    $title = mb_substr($title, 0, 200);
 }
 
 $lyrics = $lyricsText;
@@ -301,16 +434,16 @@ $stats = [
     'model' => $result['model'] ?? OPENAI_MODEL
 ];
 
-// ===== LOGGING =====
+// ===== LOGGING (with sanitization to prevent log injection) =====
 if (ENABLE_LOGGING) {
-    $logEntry = date('Y-m-d H:i:s') . " | " . 
+    $logEntry = date('Y-m-d H:i:s') . " | " .
                 "User: " . ($isPremium ? 'Premium' : 'Free') . " | " .
-                "Mythology: $mythology | " . 
-                "Genre: $genre | " . 
-                "Structure: $structure | " .
-                "Theme: $theme | " . 
-                "Tokens: " . ($result['usage']['total_tokens'] ?? 0) . "\n";
-    
+                "Mythology: " . sanitizeForLog($mythology) . " | " .
+                "Genre: " . sanitizeForLog($genre) . " | " .
+                "Structure: " . sanitizeForLog($structure) . " | " .
+                "Theme: " . sanitizeForLog($theme) . " | " .
+                "Tokens: " . intval($result['usage']['total_tokens'] ?? 0) . "\n";
+
     error_log($logEntry, 3, __DIR__ . '/logs/generation.log');
 }
 

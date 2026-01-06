@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/env-loader.php';
 /**
  * ADMIN: DISPOSABLE CODE GENERATOR (WEB VERSION)
  *

@@ -66,7 +66,7 @@ lyrics_final/
 
 ### Premium Features
 
-- 🔓 **Unbegrenzte Generierungen**
+- 🔓 **Unbegrenzte Generierungen inklusiv**
 - 🌍 **12+ Mythologien:**
   - **Asien:** Japanisch, Chinesisch, Hindu
   - **Amerika/Afrika:** Aztekisch, Maya, Afrikanisch

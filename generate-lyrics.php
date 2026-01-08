@@ -4,6 +4,9 @@
  * OpenAI ChatGPT Integration mit erweiterten Mythologien & Strukturen
  */
 
+// Load secure error handler FIRST (before any other code)
+require_once __DIR__ . '/error-handler.php';
+
 require_once __DIR__ . '/env-loader.php';
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/session-security.php';
@@ -175,17 +178,7 @@ function validateLength($value, $minLength, $maxLength, $fieldName) {
 }
 
 // ===== REQUEST VALIDATION =====
-$input = json_decode(file_get_contents('php://input'), true);
-
-// Check JSON parsing
-if (json_last_error() !== JSON_ERROR_NONE) {
-    http_response_code(400);
-    echo json_encode([
-        'error' => 'Bad Request',
-        'message' => 'Invalid JSON format'
-    ]);
-    exit;
-}
+$input = secureJsonDecode(file_get_contents('php://input'), true);
 
 // Validate prompt exists
 if (!isset($input['prompt']) || empty($input['prompt'])) {
@@ -349,24 +342,32 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-// Fehlerbehandlung
+// Fehlerbehandlung (SECURE: Keine internen Details preisgeben)
 if ($curlError) {
-    http_response_code(500);
-    echo json_encode([
-        'error' => 'Connection Error',
-        'message' => 'Could not connect to OpenAI API'
+    // Log detailed error server-side
+    secureLog('OpenAI API connection failed: ' . $curlError, 'error', [
+        'http_code' => $httpCode,
+        'curl_error' => $curlError
     ]);
+
+    // Generic error message for user
+    http_response_code(503);
+    sendJsonError('Service Unavailable', 'The service is temporarily unavailable. Please try again later.', 503);
     exit;
 }
 
 if ($httpCode !== 200) {
+    // Decode error response for logging
     $errorResponse = json_decode($response, true);
-    http_response_code($httpCode);
-    echo json_encode([
-        'error' => 'OpenAI API Error',
-        'message' => $errorResponse['error']['message'] ?? 'Unknown error',
-        'code' => $httpCode
+
+    // Log detailed error server-side
+    secureLog('OpenAI API error', 'error', [
+        'http_code' => $httpCode,
+        'response' => $errorResponse
     ]);
+
+    // Use secure error handler (prevents information disclosure)
+    handleExternalApiError($httpCode, $errorResponse);
     exit;
 }
 
@@ -374,11 +375,14 @@ if ($httpCode !== 200) {
 $result = json_decode($response, true);
 
 if (!isset($result['choices'][0]['message']['content'])) {
-    http_response_code(500);
-    echo json_encode([
-        'error' => 'Invalid Response',
-        'message' => 'OpenAI returned invalid response'
+    // Log error server-side
+    secureLog('OpenAI returned invalid response structure', 'error', [
+        'response' => $result
     ]);
+
+    // Generic error for user
+    http_response_code(500);
+    sendJsonError('Service Error', 'The service returned an unexpected response. Please try again later.', 500);
     exit;
 }
 

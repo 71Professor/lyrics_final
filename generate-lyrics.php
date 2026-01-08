@@ -202,18 +202,57 @@ if (!$promptValidation['valid']) {
 }
 
 // Define whitelists for all enum values
+// ------------------------------------------------------------
+// UI-first normalization + whitelist validation
+// ------------------------------------------------------------
+
+// 1) Allowed mythologies (match UI values)
 $allowedMythologies = [
-    'nordic', 'greek', 'egyptian', 'celtic', 'mesopotamian', 'slavic',
-    'japanese', 'hindu', 'aztec', 'mayan', 'native_american', 'polynesian',
-    'african', 'chinese', 'persian', 'aboriginal', 'unknown'
+  'norse', 'greek', 'egyptian', 'celtic', 'mesopotamian', 'slavic',
+  'japanese', 'hindu', 'aztec', 'mayan', 'native_american', 'polynesian',
+  'african', 'chinese', 'persian', 'aboriginal',
+  'occult', 'lovecraft', 'gothic',
+  'unknown'
 ];
 
-$allowedGenres = [
-    'death_metal', 'black_metal', 'thrash_metal', 'doom_metal', 'power_metal',
-    'folk_metal', 'viking_metal', 'symphonic_metal', 'melodic_death',
-    'progressive_metal', 'technical_death', 'blackened_death', 'funeral_doom',
-    'epic_doom', 'speed_metal', 'groove_metal', 'industrial_metal', 'unknown'
+// Map legacy / alternative values -> UI canonical
+$mythologyMap = [
+  'nordic' => 'norse'
 ];
+
+$mythology = $mythologyMap[$mythology] ?? $mythology;
+
+// Validate mythology
+$mythology = in_array($mythology, $allowedMythologies, true) ? $mythology : 'unknown';
+
+
+// 2) Allowed genres (match UI values)
+$allowedGenres = [
+  'heavy', 'thrash', 'death', 'black', 'doom', 'power', 'folk',
+  'metalcore', 'gothic',
+  // keep your extended set if you have them in UI / prompts
+  'viking_metal', 'symphonic_metal', 'melodic_death', 'technical_death',
+  'blackened_death', 'funeral_doom', 'epic_doom', 'speed_metal',
+  'groove_metal', 'industrial_metal',
+  'unknown'
+];
+
+// Map legacy / alternative values -> UI canonical
+$genreMap = [
+  'death_metal'  => 'death',
+  'black_metal'  => 'black',
+  'thrash_metal' => 'thrash',
+  'doom_metal'   => 'doom',
+  'power_metal'  => 'power',
+  'folk_metal'   => 'folk'
+];
+
+$genre = $genreMap[$genre] ?? $genre;
+
+// Validate genre
+$genre = in_array($genre, $allowedGenres, true) ? $genre : 'unknown';
+
+
 
 $allowedStructures = [
     'short', 'medium', 'long', 'epic', 'progressive', 'concept'

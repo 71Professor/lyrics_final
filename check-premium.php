@@ -4,6 +4,9 @@
  * Validates Premium codes and manages Premium status
  */
 
+// Load secure error handler FIRST (before any other code)
+require_once __DIR__ . '/error-handler.php';
+
 require_once __DIR__ . '/env-loader.php';
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/session-security.php';
@@ -306,7 +309,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 // POST: Validate Premium code
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $input = json_decode(file_get_contents('php://input'), true);
+    $input = secureJsonDecode(file_get_contents('php://input'), true);
     $action = $input['action'] ?? '';
 
     // ACTIVATE CODE

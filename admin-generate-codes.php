@@ -1,11 +1,15 @@
 <?php
-require_once __DIR__ . '/env-loader.php';
 /**
  * ADMIN: DISPOSABLE CODE GENERATOR (WEB VERSION)
  *
  * ⚠️ SECURITY: Set a secure password below!
  * This page generates premium codes - protect it!
  */
+
+// Load secure error handler FIRST (before any other code)
+require_once __DIR__ . '/error-handler.php';
+
+require_once __DIR__ . '/env-loader.php';
 
 // ========================================
 // SECURITY: PASSWORD CONFIGURATION

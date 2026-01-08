@@ -509,6 +509,7 @@ main {
 .premium-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 30px rgba(255, 107, 107, 0.6);
+    color: white;
 }
 
 .small-text {

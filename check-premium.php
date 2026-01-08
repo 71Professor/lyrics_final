@@ -9,6 +9,196 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/session-security.php';
 
 // ========================================
+// IP-BASED RATE LIMITING FOR PREMIUM ACTIVATION
+// ========================================
+
+/**
+ * Get the real client IP address (considering proxies)
+ */
+function getClientIP() {
+    $ip = '';
+
+    // Check for CloudFlare IP
+    if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+        $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+    }
+    // Check for forwarded IP (behind proxy/load balancer)
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        // X-Forwarded-For can contain multiple IPs, take the first one
+        $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $ip = trim($ips[0]);
+    }
+    // Check for real IP header
+    elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
+        $ip = $_SERVER['HTTP_X_REAL_IP'];
+    }
+    // Fall back to REMOTE_ADDR
+    else {
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    }
+
+    // Validate IP format
+    if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+        $ip = '0.0.0.0';
+    }
+
+    return $ip;
+}
+
+/**
+ * Check if IP is rate limited
+ * Returns: ['allowed' => bool, 'remaining' => int, 'reset_at' => timestamp, 'wait_time' => seconds]
+ */
+function checkRateLimit($ip) {
+    $rateLimitFile = __DIR__ . '/rate-limit-attempts.json';
+    $maxAttempts = 5;
+    $windowDuration = 3600; // 1 hour in seconds
+    $now = time();
+
+    // Load existing rate limit data
+    $rateLimitData = [];
+    if (file_exists($rateLimitFile)) {
+        $content = file_get_contents($rateLimitFile);
+        $rateLimitData = json_decode($content, true) ?: [];
+    }
+
+    // Clean up old entries (older than 2 hours)
+    foreach ($rateLimitData as $ipKey => $data) {
+        if (isset($data['reset_at']) && $data['reset_at'] < ($now - 3600)) {
+            unset($rateLimitData[$ipKey]);
+        }
+    }
+
+    // Get IP data
+    $ipData = $rateLimitData[$ip] ?? [
+        'attempts' => 0,
+        'first_attempt' => $now,
+        'reset_at' => $now + $windowDuration,
+        'blocked_until' => 0
+    ];
+
+    // Check if IP is currently blocked
+    if ($ipData['blocked_until'] > $now) {
+        $waitTime = $ipData['blocked_until'] - $now;
+        return [
+            'allowed' => false,
+            'remaining' => 0,
+            'reset_at' => $ipData['blocked_until'],
+            'wait_time' => $waitTime,
+            'attempts' => $ipData['attempts']
+        ];
+    }
+
+    // Check if time window has expired - reset counter
+    if ($ipData['reset_at'] <= $now) {
+        $ipData = [
+            'attempts' => 0,
+            'first_attempt' => $now,
+            'reset_at' => $now + $windowDuration,
+            'blocked_until' => 0
+        ];
+    }
+
+    // Check if attempts exceeded
+    if ($ipData['attempts'] >= $maxAttempts) {
+        // Calculate exponential backoff: 2^(attempts - maxAttempts) * 5 minutes
+        $backoffMultiplier = pow(2, min($ipData['attempts'] - $maxAttempts, 5)); // Cap at 2^5 = 32
+        $blockDuration = $backoffMultiplier * 300; // 5 minutes base * multiplier
+        $blockDuration = min($blockDuration, 7200); // Max 2 hours
+
+        $ipData['blocked_until'] = $now + $blockDuration;
+        $rateLimitData[$ip] = $ipData;
+
+        // Save updated data
+        file_put_contents($rateLimitFile, json_encode($rateLimitData, JSON_PRETTY_PRINT));
+
+        return [
+            'allowed' => false,
+            'remaining' => 0,
+            'reset_at' => $ipData['blocked_until'],
+            'wait_time' => $blockDuration,
+            'attempts' => $ipData['attempts']
+        ];
+    }
+
+    // Rate limit OK
+    $remaining = $maxAttempts - $ipData['attempts'];
+
+    return [
+        'allowed' => true,
+        'remaining' => $remaining,
+        'reset_at' => $ipData['reset_at'],
+        'wait_time' => 0,
+        'attempts' => $ipData['attempts']
+    ];
+}
+
+/**
+ * Record a failed attempt
+ */
+function recordFailedAttempt($ip, $code) {
+    $rateLimitFile = __DIR__ . '/rate-limit-attempts.json';
+    $windowDuration = 3600; // 1 hour
+    $now = time();
+
+    // Load existing data
+    $rateLimitData = [];
+    if (file_exists($rateLimitFile)) {
+        $content = file_get_contents($rateLimitFile);
+        $rateLimitData = json_decode($content, true) ?: [];
+    }
+
+    // Get or create IP data
+    if (!isset($rateLimitData[$ip])) {
+        $rateLimitData[$ip] = [
+            'attempts' => 0,
+            'first_attempt' => $now,
+            'reset_at' => $now + $windowDuration,
+            'blocked_until' => 0
+        ];
+    }
+
+    // Increment attempts
+    $rateLimitData[$ip]['attempts']++;
+    $rateLimitData[$ip]['last_attempt'] = $now;
+    $rateLimitData[$ip]['last_code'] = substr($code, 0, 20); // Store partial code for logging
+
+    // Save
+    file_put_contents($rateLimitFile, json_encode($rateLimitData, JSON_PRETTY_PRINT));
+
+    // Log the attempt
+    if (ENABLE_LOGGING) {
+        $attempts = $rateLimitData[$ip]['attempts'];
+        logMessage("Failed premium activation attempt from IP $ip (attempt #$attempts, code: " . substr($code, 0, 10) . "...)", 'warning');
+    }
+}
+
+/**
+ * Record a successful attempt (resets counter)
+ */
+function recordSuccessfulAttempt($ip, $code) {
+    $rateLimitFile = __DIR__ . '/rate-limit-attempts.json';
+
+    // Load existing data
+    $rateLimitData = [];
+    if (file_exists($rateLimitFile)) {
+        $content = file_get_contents($rateLimitFile);
+        $rateLimitData = json_decode($content, true) ?: [];
+    }
+
+    // Reset IP counter on successful activation
+    if (isset($rateLimitData[$ip])) {
+        unset($rateLimitData[$ip]);
+        file_put_contents($rateLimitFile, json_encode($rateLimitData, JSON_PRETTY_PRINT));
+    }
+
+    // Log success
+    if (ENABLE_LOGGING) {
+        logMessage("Successful premium activation from IP $ip (code: " . substr($code, 0, 10) . "...)", 'info');
+    }
+}
+
+// ========================================
 // SECURE CORS CONFIGURATION
 // ========================================
 // Get allowed domain from environment
@@ -132,6 +322,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
+        // ========================================
+        // RATE LIMITING CHECK
+        // ========================================
+        $clientIP = getClientIP();
+        $rateLimit = checkRateLimit($clientIP);
+
+        if (!$rateLimit['allowed']) {
+            // IP is rate limited
+            $waitMinutes = ceil($rateLimit['wait_time'] / 60);
+
+            http_response_code(429); // Too Many Requests
+            echo json_encode([
+                'success' => false,
+                'message' => "🚫 Too many failed attempts. Please try again in $waitMinutes minutes.",
+                'rateLimited' => true,
+                'waitTime' => $rateLimit['wait_time'],
+                'resetAt' => $rateLimit['reset_at'],
+                'attempts' => $rateLimit['attempts']
+            ]);
+
+            // Log rate limit violation
+            if (ENABLE_LOGGING) {
+                logMessage("Rate limit exceeded for IP $clientIP (attempts: {$rateLimit['attempts']}, blocked for $waitMinutes minutes)", 'warning');
+            }
+
+            exit;
+        }
+
         // Check for disposable codes first
         if (ENABLE_DISPOSABLE_CODES) {
             $disposableCheck = checkDisposableCode($code);
@@ -142,7 +360,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Check if already activated and not expired - allow re-activation
                 if ($disposableCheck['activated']) {
                     if ($disposableCheck['expired']) {
-                        // Code has expired
+                        // Code has expired - record as failed attempt
+                        recordFailedAttempt($clientIP, $code);
+
                         http_response_code(400);
                         echo json_encode([
                             'success' => false,
@@ -161,6 +381,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         // Regenerate session after privilege escalation (anti-session-fixation)
                         regenerateSessionAfterLogin();
+
+                        // Record successful re-activation
+                        recordSuccessfulAttempt($clientIP, $code);
 
                         echo json_encode([
                             'success' => true,
@@ -188,6 +411,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Regenerate session after privilege escalation (anti-session-fixation)
                 regenerateSessionAfterLogin();
+
+                // Record successful activation
+                recordSuccessfulAttempt($clientIP, $code);
 
                 // Optional: Logging
                 if (ENABLE_LOGGING) {
@@ -219,6 +445,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Regenerate session after privilege escalation (anti-session-fixation)
             regenerateSessionAfterLogin();
 
+            // Record successful activation
+            recordSuccessfulAttempt($clientIP, $code);
+
             // Optional: Logging
             if (ENABLE_LOGGING) {
                 logMessage("Premium activated: $code", 'info');
@@ -232,7 +461,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             exit;
         } else {
-            // Code invalid
+            // Code invalid - record failed attempt
+            recordFailedAttempt($clientIP, $code);
+
             echo json_encode([
                 'success' => false,
                 'message' => 'Invalid code. Please check your entry.'

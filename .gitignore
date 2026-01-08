@@ -9,6 +9,9 @@ config.php
 # Disposable codes (contains sensitive data)
 disposable_codes.json
 
+# Rate limiting data (contains IP addresses)
+rate-limit-attempts.json
+
 # Log files
 logs/
 *.log

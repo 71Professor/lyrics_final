@@ -151,7 +151,7 @@ if (!isset($_SESSION['admin_authenticated'])) {
     </head>
     <body>
         <div class="login-box">
-            <h2>🔐 Admin Login</h2>
+            <h2>Admin Login</h2>
             <?php if (isset($error)): ?>
                 <div class="error"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>

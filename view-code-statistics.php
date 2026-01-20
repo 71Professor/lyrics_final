@@ -141,9 +141,9 @@ echo "   Activated Codes:    $activatedCodes (" . $usagePercent . "%)\n";
 echo "   Unused Codes:       $unusedCodes\n";
 echo "   Active Codes:       $activeCodes (not expired)\n";
 echo "   Expired Codes:      $expiredCodes\n";
-echo "   Package Price:      " . number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2) . " EUR\n";
+echo "   Package Price:      $" . number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2) . " USD\n";
 echo "   Code Duration:      " . DISPOSABLE_CODE_DURATION_HOURS . " hours\n";
-echo "   Total Revenue:      " . number_format($revenue, 2) . " EUR\n";
+echo "   Total Revenue:      $" . number_format($revenue, 2) . " USD\n";
 echo "\n";
 
 // ========================================

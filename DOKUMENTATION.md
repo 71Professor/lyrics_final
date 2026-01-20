@@ -176,7 +176,7 @@ define('PREMIUM_CODES', [
 // ===== 24-STUNDEN-CODES (Disposable) =====
 define('ENABLE_DISPOSABLE_CODES', true);
 define('DISPOSABLE_CODES_FILE', __DIR__ . '/disposable_codes.json');
-define('DISPOSABLE_CODE_PACKAGE_PRICE', 5.00);      // EUR
+define('DISPOSABLE_CODE_PACKAGE_PRICE', 6.00);      // USD
 define('DISPOSABLE_CODE_PACKAGE_SIZE', 1);          // Codes pro Paket
 define('DISPOSABLE_CODE_DURATION_HOURS', 24);       // Gültigkeit
 
@@ -238,7 +238,7 @@ define('PREMIUM_CODES', [
 **Eigenschaften:**
 - ⏱️ **Gültig für 24 Stunden ab erster Aktivierung**
 - 🔄 **Kann während der 24h auf mehreren Geräten verwendet werden**
-- 💰 **Preis:** 5,00 EUR pro Code
+- 💰 **Preis:** $6.00 USD pro Code
 - 📊 **Tracking:** Aktivierungszeit, IP, Ablaufzeit
 - 🗄️ **Speicherung:** JSON-Datei (`disposable_codes.json`)
 
@@ -267,7 +267,7 @@ php generate-disposable-codes.php
 
 📦 PACKAGE INFORMATION:
    Package: Paket #1
-   Price: 5.00 EUR
+   Price: $6.00 USD
    Codes: 1
    Duration: 24 hours per code
 
@@ -316,9 +316,9 @@ php view-code-statistics.php --detailed --expired
    Unused Codes:       7
    Active Codes:       2 (not expired)
    Expired Codes:      1
-   Package Price:      5.00 EUR
+   Package Price:      $6.00 USD
    Code Duration:      24 hours
-   Total Revenue:      15.00 EUR
+   Total Revenue:      $18.00 USD
 ```
 
 #### Code-Aktivierung (User-Sicht)
@@ -510,7 +510,7 @@ if ($action === 'activate') {
             "created_at": "2025-11-21 14:30:00",
             "batch_id": "20251121-143000",
             "package_name": "Paket #1",
-            "package_price": 5.00,
+            "package_price": 6.00,
             "activated_at": "2025-11-21 15:45:30",
             "expires_at": "2025-11-22 15:45:30",
             "activation_ip": "192.168.1.100"
@@ -549,7 +549,7 @@ if ($action === 'activate') {
 ### Preismodell (Aktuell)
 
 **24-Stunden-Code:**
-- **Preis:** 5,00 EUR
+- **Preis:** $6.00 USD
 - **Gültigkeitsdauer:** 24 Stunden ab Aktivierung
 - **Features:** Alle Premium-Features
 - **Geräte:** Beliebig viele (während der 24h)
@@ -558,12 +558,12 @@ if ($action === 'activate') {
 
 | Laufzeit | Preis | Preis/Stunde |
 |----------|-------|--------------|
-| 12h      | 3,00€ | 0,25€        |
-| 24h      | 5,00€ | 0,21€        |
-| 48h      | 8,00€ | 0,17€        |
-| 7 Tage   | 15,00€| 0,09€        |
-| 30 Tage  | 29,00€| 0,04€        |
-| Lifetime | 99,00€| -            |
+| 12h      | $3.60 | $0.30        |
+| 24h      | $6.00 | $0.25        |
+| 48h      | $9.60 | $0.20        |
+| 7 Tage   | $18.00| $0.11        |
+| 30 Tage  | $35.00| $0.05        |
+| Lifetime | $119  | -            |
 
 ### Verkaufsplattformen
 
@@ -590,7 +590,7 @@ if ($action === 'activate') {
 1. Account auf Gumroad.com erstellen
 2. Produkt erstellen:
    - Name: "Metal Lyrics Generator - 24h Premium"
-   - Preis: 5,00 EUR
+   - Preis: $6.00 USD
    - Delivery: Email mit Code
 3. Im "Content" Feld:
    ```
@@ -655,14 +655,14 @@ if ($action === 'activate') {
 
 | Position | Details | Einnahmen |
 |----------|---------|-----------|
-| Verkaufte Codes | 100 × 5,00€ | 500,00€ |
-| Gumroad-Gebühr | 5% | -25,00€ |
-| OpenAI API-Kosten | ~3.000 Generierungen × $0.01 | -30,00€ |
-| **Netto-Gewinn** | | **445,00€** |
+| Verkaufte Codes | 100 × $6.00 | $600.00 |
+| Gumroad-Gebühr | 5% | -$30.00 |
+| OpenAI API-Kosten | ~3.000 Generierungen × $0.01 | -$30.00 |
+| **Netto-Gewinn** | | **$540.00** |
 
 **ROI-Berechnung:**
 - Initiale Kosten: ~0€ (nur Zeit)
-- Monatliche Fixkosten: Hosting (~5€) + Domain (~1€)
+- Monatliche Fixkosten: Hosting (~$6) + Domain (~$1.20)
 - Break-Even: 2 verkaufte Codes/Monat
 - Profit-Marge: ~89%
 
@@ -672,10 +672,10 @@ if ($action === 'activate') {
 
 | Aktion | Preis | Rabatt | Zeitraum |
 |--------|-------|--------|----------|
-| Black Friday | 3,00€ | 40% | 1 Tag |
-| Wochenende-Special | 4,00€ | 20% | Fr-So |
-| Bundle: 3 Codes | 12,00€ | 20% | Permanent |
-| Erste 100 Kunden | 3,50€ | 30% | Launch |
+| Black Friday | $3.60 | 40% | 1 Tag |
+| Wochenende-Special | $4.80 | 20% | Fr-So |
+| Bundle: 3 Codes | $14.40 | 20% | Permanent |
+| Erste 100 Kunden | $4.20 | 30% | Launch |
 
 ---
 
@@ -940,7 +940,7 @@ if (isset($_SESSION['lyrics_cache'][$cacheKey])) {
    Try it: https://your-domain.com
 
    Free: 5 generations/day
-   Premium: 24h unlimited access for 5€
+   Premium: 24h unlimited access for $6
 
    Feedback welcome!
    ```
@@ -1003,15 +1003,15 @@ if (isset($_SESSION['lyrics_cache'][$cacheKey])) {
 
 **Strategie:**
 
-1. **Launch-Rabatt:** Erste 100 Codes für 3,50€ (statt 5€)
-2. **Referral-Programm:** "Empfiehl einen Freund → 1€ Rabatt"
+1. **Launch-Rabatt:** Erste 100 Codes für $4.20 (statt $6)
+2. **Referral-Programm:** "Empfiehl einen Freund → $1.20 Rabatt"
 3. **Contest:** "Beste Lyrics gewinnen Premium-Code"
 4. **Email-Liste:** Newsletter mit exklusiven Tipps
 5. **Free Samples:** Influencer bekommen kostenlose Codes
 
 **Conversion-Optimierung:**
 
-- A/B-Test: 5€ vs. 4,50€
+- A/B-Test: $6 vs. $5.40
 - Urgency: "Nur noch 50 Codes zum Sonderpreis!"
 - Social Proof: "Bereits 234 zufriedene Metal-Fans!"
 - Money-Back-Guarantee: "Nicht zufrieden? Geld zurück!" (nur bei Lifetime)
@@ -1025,8 +1025,8 @@ if (isset($_SESSION['lyrics_cache'][$cacheKey])) {
    Dein Premium-Code läuft in 1 Stunde ab! 🕐
 
    Sichere dir jetzt einen neuen Code:
-   → 7-Tage-Code für nur 12€ (statt 15€)
-   → Lifetime-Access für 79€ (statt 99€)
+   → 7-Tage-Code für nur $14.40 (statt $18)
+   → Lifetime-Access für $95 (statt $119)
 
    [Jetzt upgraden]
    ```

@@ -63,7 +63,7 @@ if (isset($_GET['download']) && isset($_SESSION['last_generated_codes'])) {
     $content .= "Paket: " . $packageName . "\n";
     $content .= "Generiert am: " . date('d.m.Y H:i:s') . "\n";
     $content .= "Anzahl Codes: " . count($codes) . "\n";
-    $content .= "Preis pro Code: " . number_format($packagePrice, 2) . " EUR\n";
+    $content .= "Preis pro Code: $" . number_format($packagePrice, 2) . " USD\n";
     $content .= "Gültigkeit: 24 Stunden ab Aktivierung\n\n";
     $content .= "========================================\n";
     $content .= "CODES\n";
@@ -459,7 +459,7 @@ $availableCodes = $totalCodes - $totalActivated;
             </div>
             <div class="stat-box">
                 <h3>Preis</h3>
-                <div class="value"><?php echo number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2); ?>€</div>
+                <div class="value">$<?php echo number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2); ?></div>
             </div>
         </div>
 

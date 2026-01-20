@@ -117,7 +117,7 @@ Das Projekt verwendet **24-Stunden-Premium-Codes:**
 - Gültig für 24 Stunden ab Aktivierung
 - Unbegrenzte Generierungen während der 24h
 - Verwaltung über JSON-Datenbank
-- Preis: 5,00 EUR pro Code
+- Preis: $6.00 USD pro Code
 
 #### Codes generieren
 
@@ -149,7 +149,7 @@ define('MAX_FREE_GENERATIONS', 5);
 // 24h Premium-Codes
 define('ENABLE_DISPOSABLE_CODES', true);
 define('DISPOSABLE_CODE_DURATION_HOURS', 24);
-define('DISPOSABLE_CODE_PACKAGE_PRICE', 5.00);
+define('DISPOSABLE_CODE_PACKAGE_PRICE', 6.00);
 ```
 
 ---
@@ -158,7 +158,7 @@ define('DISPOSABLE_CODE_PACKAGE_PRICE', 5.00);
 
 ### Preismodell
 
-- **24h Premium-Code:** 5,00 EUR
+- **24h Premium-Code:** $6.00 USD
 - **Alle Premium-Features:** Unbegrenzte Generierungen, 12+ Mythologien, erweiterte Strukturen
 
 ### Verkaufsplattformen
@@ -171,10 +171,10 @@ define('DISPOSABLE_CODE_PACKAGE_PRICE', 5.00);
 ### Beispiel-Rechnung
 
 Bei 100 verkauften Codes/Monat:
-- Einnahmen: 500,00 EUR
-- Gumroad-Gebühr: -25,00 EUR
-- OpenAI API-Kosten: ~30,00 EUR
-- **Netto-Gewinn: ~445,00 EUR** 💰
+- Einnahmen: $600.00 USD
+- Gumroad-Gebühr: -$30.00 USD
+- OpenAI API-Kosten: ~$30.00 USD
+- **Netto-Gewinn: ~$540.00 USD** 💰
 
 ---
 

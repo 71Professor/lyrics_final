@@ -180,7 +180,7 @@ echo "\n";
 
 echo "📦 PACKAGE INFORMATION:\n";
 echo "   Package: $packageName\n";
-echo "   Price: " . number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2) . " EUR\n";
+echo "   Price: $" . number_format(DISPOSABLE_CODE_PACKAGE_PRICE, 2) . " USD\n";
 echo "   Codes: " . count($newCodes) . "\n";
 echo "   Duration: " . DISPOSABLE_CODE_DURATION_HOURS . " hours per code\n";
 echo "   Batch ID: $batchId\n";
